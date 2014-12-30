@@ -17,7 +17,7 @@
 
 <script type = "text/javascript" language = "javascript">
     
- var url = "controller.php?" + "q=";
+ var url = "controller.php?" + "year=";
 
 $( document ).ready(function() {
      
@@ -42,8 +42,6 @@ function loadTable(year)
           year = $(this).text();
           loadTable(year);
         });
-
-
      });
 
 }
@@ -140,7 +138,7 @@ function loadTable(year)
     
      <!-- <div data-toggle="table"> -->
     <table class="table" >
-        <tr>
+        <!-- <tr>
           <th> Group </th>
           <th> Total $ </th>
           <th> Develop </th>
@@ -166,7 +164,7 @@ function loadTable(year)
                 <td id='groupA"."Disaster'> Disaster </td>
                 <td id='groupA"."Cost'> Cost </td>
                 <td id='groupA"."Net'> 0 </td>
-              </tr>
+              </tr> -->
       </table>
 </div>
     </body>

@@ -5,6 +5,9 @@ class Climate_Model
 	// every iteration is a 15 years increment
 	const INCREMENT = 15;
 
+	// first year for every iteration
+	const FIRST_YEAR = 2010;
+
 	// array with 7 scenario objects
 	var $scenarios;
 
@@ -40,6 +43,24 @@ class Climate_Model
 			2100 => true
 		);
 
+		$this->groups = array(
+			"A" => new Group("A"),
+			"B" => new Group("B"),
+			"C" => new Group("C"),
+			"D" => new Group("D"),
+			"E" => new Group("E"),
+			"F" => new Group("F"),
+			"G" => new Group("G"),
+			"H" => new Group("H"),
+			"I" => new Group("I"),
+			"J" => new Group("J"),
+			"K" => new Group("K"),
+			"L" => new Group("L"),
+			"M" => new Group("M"),
+			"N" => new Group("N"),
+			"O" => new Group("O"),
+			"P" => new Group("P")
+		);
 	}
 
 	function displayScenario($year)
@@ -59,13 +80,38 @@ class Climate_Model
 			 "<th><a href=''>2100</a></th></tr>";
 
 		$this->scenarios[$year]->displayTable();
+
+		$this->displayGroups($year);
+	}
+
+	function displayGroups($year)
+	{
+		$header = "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
+		"<tr>" .
+          "<th> Group </th>" .
+          "<th> Total $ </th>" .
+          "<th> Develop </th>" .
+          "<th> Income </th>" .
+          "<th> Disaster </th>" .
+          "<th> Cost </th>" .
+          "<th> Net </th>" .
+        "</tr>";
+
+        echo $header;
+		foreach ($this->groups as $key => $value)
+			$value->displayGroup($year);
 	}
 
 	function cloneScenario($year)
 	{
-		$this->scenarios[$year] = clone $this->scenarios[$year - self::INCREMENT];
+		if ($year != self::FIRST_YEAR && $this->scenarios[$year-self::INCREMENT] == "")
+			$this->scenarios[$year] = clone $this->scenarios[self::FIRST_YEAR];
+		else
+		{
+			$this->scenarios[$year] = clone $this->scenarios[$year - self::INCREMENT];
+			$this->should_clone[$year] = false;
+		}
 		$this->scenarios[$year]->setCurrentYear($year);
-		$this->should_clone[$year] = false;
 	}
 
 	function updateEmissions($year, $value)
@@ -225,22 +271,130 @@ class Scenario
 
 class Group
 {
+	// every iteration is a 15 years increment
+	const INCREMENT = 15;
+
+	// last year for every iteration
+	const LAST_YEAR = 2100;
+
+	// first year for every iteration
+	const FIRST_YEAR = 2010;
+
 	//group name (oiriginally A-J)
 	var $group_name;
 
-	// hash table with income for every given year
-	var $income;
+	// hash table with decisions, income, net, total and alive for every given year
+	var $data;
 
 	// boolean or disaster object containing cost
 	var $disaster;
 
-	// hash table with total net income for every given year
-	var $total;
 
-	// boolean if group is alive or dead
-	var $alive;
+	function Group($name)
+	{
+		$this->group_name = $name;
 
+		$group_variables = array(
+			"decision" => 0,
+			"income" => 0,
+			"net" => 0,
+			"total" => 0,
+			"alive" => true,
+			"disaster" => false,
+			"cost" => 0
+			);
 
+		$this->data = array(
+			2010 => $group_variables,
+			2025 => $group_variables,
+			2040 => $group_variables,
+			2055 => $group_variables,
+			2070 => $group_variables,
+			2085 => $group_variables,
+			2100 => $group_variables);
+	}
+
+	function displayGroup($year)
+	{
+		$disaster = "";
+		if ($this->data[$year]["disaster"] == true)
+			$disaster = "Se ferrou mane";
+		else
+			$disaster = "de boa na lagoa";
+
+		$name = "group" . $this->group_name;
+		$html_string = "<tr>\n";
+
+		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
+                "<td id='". $name ."Total'>". $this->data[$year]["total"] . "</td>" .
+                "<td>" .
+                  "<select name='" . $name . "Decision'>" .
+                    "<option value='0'>Prohibit</option>" .
+                    "<option value='1'>Restrict</option>" .
+                    "<option value='3'>Discourage</option>" .
+                    "<option value='5'>Maintain</option>" .
+                    "<option value='6'>Encourage</option>" .
+                  "</select>" .
+                "</td>" .
+                "<td id='" . $name . "Income'>" . $this->data[$year]["income"] . "</td>" .
+                "<td id='" . $name . "Disaster'>" . $disaster . "</td>" .
+                "<td id='" . $name . "Cost'>" . $this->data[$year]["cost"] . "</td>" .
+                "<td id='" . $name . "Net'> ". $this->data[$year]["net"] . "</td>";
+
+        $html_string .= "</tr>";
+
+		if ($this->data[$year]["alive"] == true)
+		{
+        	echo $html_string;
+        }
+        else
+        	echo "<tr style='background-color: red; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
+	}
+
+	function updateAll($year, $key)
+	{
+		try 
+		{
+			for ($x=$year+self::INCREMENT; $x<=self::LAST_YEAR; $x+=self::INCREMENT)
+				$this->data[$x][$key] = $this->data[$year][$key];
+		}
+		catch (Exception $e)
+		{
+			echo 'Caught exception, idiota: ',  $e->getMessage(), "\n";
+		}
+	}
+
+	function kill($year)
+	{
+		$this->data[$year]["alive"] = false;
+		$this->updateAll($year, "alive");
+	}
+
+	function changeDecision($year, $value)
+	{
+		if ($value == 0 || $value == 1 || $value == 3 || $value == 5 || $value == 6)
+		{
+			$this->data[$year]["decision"] = $value;
+			$this->updateValues($year);
+		}
+		else
+			echo "Os valores tão errados, retardado";
+	}
+
+	function updateValues($year)
+	{
+		$this->data[$year]["income"] = $this->data[$year]["decision"];
+		/*$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$year]["income"];*/
+		$this->calculateTotal($year);
+		$this->updateAll($year, "total");
+	}
+
+	function calculateTotal($year)
+	{
+		$this->data[$year]["total"] = 0;
+		for ($x=self::FIRST_YEAR; $x<=$year; $x+=self::INCREMENT)
+			$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$x]["income"];
+	}
 }
 
 class Disaster
