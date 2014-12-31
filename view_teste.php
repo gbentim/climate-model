@@ -22,19 +22,19 @@
 $( document ).ready(function() {
      
     loadTable(2010);
-     
 
 });
 
 
-function loadTable(year)
+function loadTable(year, additional_params)
 {
+  additional_params = typeof additional_params !== 'undefined' ? additional_params : "";
   //alert(year);
-   $("#scenario-table").load(url + year, 
+   $("#scenario-table").load(url + year + additional_params, 
 
         function prevent()
         {
-          $( "a" ).click(function( event ) {
+          $( ".years" ).click(function( event ) {
          //alert( event.isDefaultPrevented() ); // false
          event.preventDefault();
          //alert( event.isDefaultPrevented() ); // true
@@ -42,9 +42,56 @@ function loadTable(year)
           year = $(this).text();
           loadTable(year);
         });
+
+          $(".choice").change(function() {
+              additional_params = "";
+              additional_params += "&group_name=" + $(this).attr('name');
+              additional_params += "&group_value=" + $(this).val();
+              // alert(additional_params);
+              loadTable(year, additional_params)     
+          });
+
      });
 
 }
+
+// function changeGroups()
+// {
+
+// }
+
+// var choices = []; 
+
+// function getChoice()
+// {
+  
+//   $('.choice :selected').each(function(i, selected){ 
+//     choices[i] = $(selected).val(); 
+//   });
+
+//   loadChoice();
+//   alert(choices);
+// }
+
+// function loadChoice()
+// {
+  
+//   //var choiceArray = choices.serializeArray()
+
+//   $.ajax({
+//      type: "GET",
+//      url: "controller.php",
+//      // async: false,
+//      data:  {choices:choices},
+//      // dataType: "json",
+//      // data: JSON.stringify({ choices: choices }),
+//      success: function(r){
+//        // $('.answer').html(msg);
+//        alert("Enviei decisao: "+r.responseText);
+//      }
+//   });
+// }
+
 
 </script>
 
@@ -128,44 +175,12 @@ function loadTable(year)
   </div><!-- /.container-fluid -->
 </nav>
 
-  <div class="container">
-
-
-    <table class="table" id="scenario-table">
+    <div class="container" id="scenario-table">
+<!--     <table class="table" >
 
     </table>
 
-    
-     <!-- <div data-toggle="table"> -->
-    <table class="table" >
-        <!-- <tr>
-          <th> Group </th>
-          <th> Total $ </th>
-          <th> Develop </th>
-          <th> Income </th>
-          <th> Disaster </th>
-          <th> Cost </th>
-          <th> Net </th> 
-        </tr>
-    <tr id='groupA'>
-                <td id='groupA"."Name'> " A "</td>
-                <td id='groupA"."Total'> 0 </td>
-                <td>
-                <form method='post'>
-                  <select name='groupA"."Decision' onchange='loadTable(this.value);'>
-                    <option value='0'>Prohibit</option>
-                    <option value='1'>Restrict</option>
-                    <option value='3'>Discourage</option>
-                    <option value='5'>Maintain</option>
-                    <option value='6'>Encourage</option>
-                  </select>
-                </td>
-                <td id='groupAIncome'> 0</td>
-                <td id='groupA"."Disaster'> Disaster </td>
-                <td id='groupA"."Cost'> Cost </td>
-                <td id='groupA"."Net'> 0 </td>
-              </tr> -->
-      </table>
-</div>
-    </body>
+      </table> -->
+    </div>
+ </body>
 </html>

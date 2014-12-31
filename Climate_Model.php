@@ -8,6 +8,8 @@ class Climate_Model
 	// first year for every iteration
 	const FIRST_YEAR = 2010;
 
+	const INITIAL_EMISSIONS = 0.13;
+
 	// array with 7 scenario objects
 	var $scenarios;
 
@@ -69,25 +71,30 @@ class Climate_Model
 			$this->cloneScenario($year);
 
 		echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
-		echo "<tr>" .
+		echo "<table class='table'>" . 
+			 "<tr>" .
 			 "<th> Year </th>" .
-			 "<th><a href=''>2010</a></th>" .
-			 "<th><a href=''>2025</a></th>" .
-			 "<th><a href=''>2040</a></th>" .
-			 "<th><a href=''>2055</a></th>" .
-			 "<th><a href=''>2070</a></th>" .
-			 "<th><a href=''>2085</a></th>" .
-			 "<th><a href=''>2100</a></th></tr>";
+			 "<th><a href='' class='years'>2010</a></th>" .
+			 "<th><a href='' class='years'>2025</a></th>" .
+			 "<th><a href='' class='years'>2040</a></th>" .
+			 "<th><a href='' class='years'>2055</a></th>" .
+			 "<th><a href='' class='years'>2070</a></th>" .
+			 "<th><a href='' class='years'>2085</a></th>" .
+			 "<th><a href='' class='years'>2100</a></th></tr>";
 
 		$this->scenarios[$year]->displayTable();
 
+		echo "</table>";
+		echo "<table class='table'>";
+		echo "<hr>";
 		$this->displayGroups($year);
+		echo "</table>";
 	}
 
 	function displayGroups($year)
 	{
-		$header = "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
-		"<tr>" .
+		// "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
+		$header = "<tr>" .
           "<th> Group </th>" .
           "<th> Total $ </th>" .
           "<th> Develop </th>" .
@@ -118,9 +125,49 @@ class Climate_Model
 	{
 		if ($this->should_clone[$year])
 			$this->cloneScenario($year);
-/*		echo "O que ta pegando...  Year: " . $year . "Valor: " . $value;*/
-		$this->scenarios[$year]->setEmissionsGrowth($value);
+
+		if ($year == self::FIRST_YEAR)
+			$previous = self::INITIAL_EMISSIONS;
+		else
+		{
+			$previous = $this->scenarios[$year]->climate_variables["Emissions_Growth"]->predictions[$year - self::INCREMENT];
+			$previous = $previous*(($previous/4)+1);
+		}
+
+		$new_emissions = $previous - (0.01 * (5 - $value));
+		echo "O que ta pegando...  Valor anterior: " . $previous;
+		echo "Valor average: " . $value;
+		$this->scenarios[$year]->setEmissionsGrowth($new_emissions);
 		$this->should_clone[$year + self::INCREMENT] = true;
+	}
+
+	function calculateAverage($year)
+	{
+		$total = 0;
+		$num_groups = 0;
+		foreach ($this->groups as $key => $value)
+		{
+			if ($value->data[$year]["decision"] != null)
+			{
+				$total = $total + $value->data[$year]["decision"];
+				$num_groups++;
+			}
+		}
+
+		return $total / $num_groups;
+	}
+
+	function changeGroupDecision($name, $year, $value)
+	{		
+		$this->groups[$name]->changeDecision($year, $value);
+
+		$average = $this->calculateAverage($year);
+
+		echo "This is the average: " . $average;
+
+		$this->updateEmissions($year, $average);
+
+
 	}
 }
 
@@ -295,7 +342,7 @@ class Group
 		$this->group_name = $name;
 
 		$group_variables = array(
-			"decision" => 0,
+			"decision" => null,
 			"income" => 0,
 			"net" => 0,
 			"total" => 0,
@@ -328,7 +375,8 @@ class Group
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
                 "<td id='". $name ."Total'>". $this->data[$year]["total"] . "</td>" .
                 "<td>" .
-                  "<select name='" . $name . "Decision'>" .
+                  "<select  class='choice' name='" . $this->group_name . "'>" .
+                    "<option value='null'>Default</option>" .
                     "<option value='0'>Prohibit</option>" .
                     "<option value='1'>Restrict</option>" .
                     "<option value='3'>Discourage</option>" .
@@ -341,6 +389,7 @@ class Group
                 "<td id='" . $name . "Cost'>" . $this->data[$year]["cost"] . "</td>" .
                 "<td id='" . $name . "Net'> ". $this->data[$year]["net"] . "</td>";
 
+        //onchange='getChoice()'
         $html_string .= "</tr>";
 
 		if ($this->data[$year]["alive"] == true)
