@@ -10,6 +10,9 @@ class Climate_Model
 
 	const INITIAL_EMISSIONS = 0.13;
 
+	const MIN = 1;
+	const MAX = 99;
+
 	// array with 7 scenario objects
 	var $scenarios;
 
@@ -87,6 +90,8 @@ class Climate_Model
 		echo "</table>";
 		echo "<table class='table'>";
 		echo "<hr>";
+		echo "<button type='button' class='btn btn-danger btn-block' id='danger'>Disaster</button>";
+		echo "<hr>";
 		$this->displayGroups($year);
 		echo "</table>";
 	}
@@ -135,8 +140,8 @@ class Climate_Model
 		}
 
 		$new_emissions = $previous - (0.01 * (5 - $value));
-		echo "O que ta pegando...  Valor anterior: " . $previous;
-		echo "Valor average: " . $value;
+		// echo "O que ta pegando...  Valor anterior: " . $previous;
+		// echo "Valor average: " . $value;
 		$this->scenarios[$year]->setEmissionsGrowth($new_emissions);
 		$this->should_clone[$year + self::INCREMENT] = true;
 	}
@@ -163,11 +168,37 @@ class Climate_Model
 
 		$average = $this->calculateAverage($year);
 
-		echo "This is the average: " . $average;
+		// echo "This is the average: " . $average;
 
 		$this->updateEmissions($year, $average);
+	}
 
+	function createDisasterScenario($year)
+	{
+		foreach ($this->groups as $key => $value)
+			if ($value->data[$year]["decision"] != null)
+				$this->generateDisaster($value->group_name, $year);
+	}
 
+	function generateDisaster($group, $year)
+	{
+		$disaster = rand (self::MIN, self::MAX);
+		$risk = round($this->scenarios[$year]->climate_variables["Disaster_Risk"]->predictions[$year]);
+
+		if ($disaster > $risk)
+		{
+			$this->groups[$group]->data[$year]["disaster"] = false;
+			$this->groups[$group]->data[$year]["cost"] = 0;
+		}
+		else
+		{
+			$this->groups[$group]->data[$year]["disaster"] = true;
+			$this->groups[$group]->calculateCost($year, $disaster, $risk);
+		}
+
+		// echo "<p> Group: " . $group . "</p>";
+		// echo "<p> The disaster scenario is: " . $disaster . "</p>";
+		// echo "<p> The disaster risk is: " . $risk . "</p>";
 	}
 }
 
@@ -434,7 +465,7 @@ class Group
 	{
 		$this->data[$year]["income"] = $this->data[$year]["decision"];
 		/*$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$year]["income"];*/
-		$this->calculateTotal($year);
+		// $this->calculateTotal($year);
 		$this->updateAll($year, "total");
 	}
 
@@ -442,7 +473,22 @@ class Group
 	{
 		$this->data[$year]["total"] = 0;
 		for ($x=self::FIRST_YEAR; $x<=$year; $x+=self::INCREMENT)
-			$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$x]["income"];
+			$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$x]["net"];
+		if ($this->data[$year]["total"] < 0)
+			$this->kill($year);
+	}
+
+	function calculateCost($year, $disaster, $risk)
+	{
+		$this->data[$year]["cost"] = round(-($risk - $disaster)/10);
+		echo "<p> This is the cost: " . $this->data[$year]["cost"] . "</p>";
+		$this->calculateNet($year);
+	}
+
+	function calculateNet($year)
+	{
+		$this->data[$year]["net"] = $this->data[$year]["income"] + $this->data[$year]["cost"];
+		$this->calculateTotal($year);
 	}
 }
 

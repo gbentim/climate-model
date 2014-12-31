@@ -5,21 +5,26 @@
 	if (isset($_GET['year']))
 		$year = intval($_GET['year']);
 
-	if (isset($_GET['group_name'])) 
-	{
-		echo "<h2> the Group is " . $_GET['group_name'];
-	}
+	// if (isset($_GET['group_name'])) 
+	// {
+	// 	echo "<h2> the Group is " . $_GET['group_name'];
+	// }
 
-	if (isset($_GET['group_value'])) 
-	{
-		echo "<h2> the value is " . $_GET['group_value'];
-	}
+	// if (isset($_GET['group_value'])) 
+	// {
+	// 	echo "<h2> the value is " . $_GET['group_value'];
+	// }
 
 	if (isset($_GET['group_value']) && isset($_GET['group_name']))
 	{
 		$name = $_GET['group_name'];
 		$value = $_GET['group_value'];
 		$_SESSION['model']->changeGroupDecision($name, $year, $value);
+	}
+
+	if (isset($_GET['disaster']) == true)
+	{
+		$_SESSION['model']->createDisasterScenario($year);
 	}
 
 	$_SESSION['model']->displayScenario($year);

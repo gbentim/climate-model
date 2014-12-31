@@ -51,6 +51,13 @@ function loadTable(year, additional_params)
               loadTable(year, additional_params)     
           });
 
+          $("#danger").click(function( event ) {
+              event.preventDefault();
+              additional_params = "";
+              additional_params += "&disaster=true";
+              loadTable(year, additional_params)     
+          });
+
      });
 
 }
