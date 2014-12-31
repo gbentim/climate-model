@@ -73,7 +73,7 @@ class Climate_Model
 		if ($this->should_clone[$year])
 			$this->cloneScenario($year);
 
-		echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
+		// echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
 		echo "<table class='table'>" . 
 			 "<tr>" .
 			 "<th> Year </th>" .
