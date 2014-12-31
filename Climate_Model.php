@@ -103,6 +103,7 @@ class Climate_Model
           "<th> Group </th>" .
           "<th> Total $ </th>" .
           "<th> Develop </th>" .
+          "<th> Decision </th>" .
           "<th> Income </th>" .
           "<th> Disaster </th>" .
           "<th> Cost </th>" .
@@ -189,6 +190,7 @@ class Climate_Model
 		{
 			$this->groups[$group]->data[$year]["disaster"] = false;
 			$this->groups[$group]->data[$year]["cost"] = 0;
+			$this->groups[$group]->calculateNet($year);
 		}
 		else
 		{
@@ -200,6 +202,24 @@ class Climate_Model
 		// echo "<p> The disaster scenario is: " . $disaster . "</p>";
 		// echo "<p> The disaster risk is: " . $risk . "</p>";
 	}
+
+	function setNumberGroups($num)
+	{
+		$count = 0;
+		foreach ($this->groups as $key => $value) {
+			if ($num > $count)
+			{
+				$value->visibility = true;
+				$count++;
+			}
+			else
+			{
+				$value->visibility = false;
+				$count++;
+			}
+		}	
+	}
+
 }
 
 class Scenario
@@ -247,6 +267,17 @@ class Scenario
 	function setCurrentYear($year)
 	{
 		$this->current_year = $year;
+		$this->setVariablesYear();
+	}
+
+	function setVariablesYear()
+	{
+		$this->climate_variables["Emissions_Growth"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["CO2_PPM"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["CO2_Radiative_Forcing"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Ocean_Heat_Storage"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Temperature_Increase"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Disaster_Risk"]->setCurrentYear($this->current_year);
 	}
 
 	function displayTable()
@@ -367,6 +398,8 @@ class Group
 	// boolean or disaster object containing cost
 	var $disaster;
 
+	var $visibility;
+
 
 	function Group($name)
 	{
@@ -378,7 +411,7 @@ class Group
 			"net" => 0,
 			"total" => 0,
 			"alive" => true,
-			"disaster" => false,
+			"disaster" => null,
 			"cost" => 0
 			);
 
@@ -390,15 +423,24 @@ class Group
 			2070 => $group_variables,
 			2085 => $group_variables,
 			2100 => $group_variables);
+
+		$this->visibility = false;
 	}
 
 	function displayGroup($year)
 	{
 		$disaster = "";
+		$style = "";
 		if ($this->data[$year]["disaster"] == true)
+		{
 			$disaster = "Se ferrou mane";
-		else
+			$style = "style='background-color: red; color: white;'";
+		}
+		elseif (is_null($this->data[$year]["disaster"]) == false)
+		{
 			$disaster = "de boa na lagoa";
+			$style = "style='background-color: green; color: white;'";
+		}
 
 		$name = "group" . $this->group_name;
 		$html_string = "<tr>\n";
@@ -415,20 +457,40 @@ class Group
                     "<option value='6'>Encourage</option>" .
                   "</select>" .
                 "</td>" .
+                "<td>" . $this->currentDecision($year) . "</td>" . 
                 "<td id='" . $name . "Income'>" . $this->data[$year]["income"] . "</td>" .
-                "<td id='" . $name . "Disaster'>" . $disaster . "</td>" .
+                "<td id='" . $name . "Disaster'" . $style . ">" . $disaster . "</td>" .
                 "<td id='" . $name . "Cost'>" . $this->data[$year]["cost"] . "</td>" .
                 "<td id='" . $name . "Net'> ". $this->data[$year]["net"] . "</td>";
 
         //onchange='getChoice()'
         $html_string .= "</tr>";
 
-		if ($this->data[$year]["alive"] == true)
-		{
+		if ($this->data[$year]["alive"] == true && $this->visibility == true)
         	echo $html_string;
-        }
-        else
+        elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
         	echo "<tr style='background-color: red; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
+	}
+
+	function currentDecision($year)
+	{
+		switch ($this->data[$year]["decision"])
+		{
+			case null:
+				return "None";
+			case 0:
+				return "Prohibited";
+			case 1:
+				return "Restricted";
+			case 3:
+				return "Discouraged";
+			case 5:
+				return "Maintaned";
+			case 6:
+				return "Encouraged";
+			default:
+				return "Arrombado";
+		}
 	}
 
 	function updateAll($year, $key)
@@ -455,25 +517,27 @@ class Group
 		if ($value == 0 || $value == 1 || $value == 3 || $value == 5 || $value == 6)
 		{
 			$this->data[$year]["decision"] = $value;
-			$this->updateValues($year);
+			$this->updateIncome($year);
 		}
 		else
 			echo "Os valores tão errados, retardado";
 	}
 
-	function updateValues($year)
+	function updateIncome($year)
 	{
 		$this->data[$year]["income"] = $this->data[$year]["decision"];
 		/*$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$year]["income"];*/
 		// $this->calculateTotal($year);
-		$this->updateAll($year, "total");
+		// $this->updateAll($year, "total");
 	}
 
 	function calculateTotal($year)
 	{
 		$this->data[$year]["total"] = 0;
-		for ($x=self::FIRST_YEAR; $x<=$year; $x+=self::INCREMENT)
+		for ($x=self::FIRST_YEAR; $x<=$year; $x+=self::INCREMENT){
 			$this->data[$year]["total"] = $this->data[$year]["total"] + $this->data[$x]["net"];
+			$this->updateAll($year, "total");
+		}
 		if ($this->data[$year]["total"] < 0)
 			$this->kill($year);
 	}
@@ -481,7 +545,7 @@ class Group
 	function calculateCost($year, $disaster, $risk)
 	{
 		$this->data[$year]["cost"] = round(-($risk - $disaster)/10);
-		echo "<p> This is the cost: " . $this->data[$year]["cost"] . "</p>";
+		// echo "<p> This is the cost: " . $this->data[$year]["cost"] . "</p>";
 		$this->calculateNet($year);
 	}
 
@@ -544,6 +608,11 @@ class Climate_Variable
 		$this->update();
 	}
 
+	function setCurrentYear($year)
+	{
+		$this->current_year = $year;
+	}
+
 	function getInitialValue() 
 	{
 		return $this->initial_value;
@@ -554,11 +623,16 @@ class Climate_Variable
 		$html_string = "<tr>\n";
 		$html_string .= "<td>" . $this->name .  "</td>";
 
-		$year_id = $this->current_year;
-
+		$year_id = 2010;
+		$style = "";
 		foreach ($this->predictions as $key => $value) 
 		{
-			$html_string .= "<td class='col" . $year_id . "'>" . $this->convertDisplay($value) . "</td>";
+			if ($year_id  == $this->current_year)
+				$style = " style='border: 2px solid black'";
+			else
+				$style = "";
+
+			$html_string .= "<td class='col" . $year_id . "'" . $style . ">" . $this->convertDisplay($value) . "</td>";
 			$year_id = $year_id + self::INCREMENT;
 		}
 		$html_string .= "</tr>\n";

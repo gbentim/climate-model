@@ -58,6 +58,15 @@ function loadTable(year, additional_params)
               loadTable(year, additional_params)     
           });
 
+          $(".num_groups").click(function( event ) {
+              event.preventDefault();
+              groups = $(this).text();
+              additional_params = "";
+              additional_params += "&num_groups="+groups;
+              loadTable(year, additional_params)     
+          });
+
+
      });
 
 }
@@ -125,7 +134,7 @@ function loadTable(year, additional_params)
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
+        <!-- <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scenarios <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="#">Pre-set Scenario 1</a></li>
@@ -136,7 +145,7 @@ function loadTable(year, additional_params)
             <li class="divider"></li>
             <li><a href="#">Create a Scenario</a></li>
           </ul>
-        </li>
+        </li> -->
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hide Rows <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
@@ -155,22 +164,22 @@ function loadTable(year, additional_params)
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Number of Groups <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">6</a></li>
-            <li><a href="#">7</a></li>
-            <li><a href="#">8</a></li>
-            <li><a href="#">9</a></li>
-            <li><a href="#">10</a></li>
-            <li><a href="#">11</a></li>
-            <li><a href="#">12</a></li>
-            <li><a href="#">13</a></li>
-            <li><a href="#">14</a></li>
-            <li><a href="#">15</a></li>
-            <li><a href="#">16</a></li>
+            <li><a class="num_groups" href="#">1</a></li>
+            <li><a class="num_groups" href="#">2</a></li>
+            <li><a class="num_groups" href="#">3</a></li>
+            <li><a class="num_groups" href="#">4</a></li>
+            <li><a class="num_groups" href="#">5</a></li>
+            <li><a class="num_groups" href="#">6</a></li>
+            <li><a class="num_groups" href="#">7</a></li>
+            <li><a class="num_groups" href="#">8</a></li>
+            <li><a class="num_groups" href="#">9</a></li>
+            <li><a class="num_groups" href="#">10</a></li>
+            <li><a class="num_groups" href="#">11</a></li>
+            <li><a class="num_groups" href="#">12</a></li>
+            <li><a class="num_groups" href="#">13</a></li>
+            <li><a class="num_groups" href="#">14</a></li>
+            <li><a class="num_groups" href="#">15</a></li>
+            <li><a class="num_groups" href="#">16</a></li>
           </ul>
         </li>
       </ul>
