@@ -206,7 +206,8 @@ class Climate_Model
 	function setNumberGroups($num)
 	{
 		$count = 0;
-		foreach ($this->groups as $key => $value) {
+		foreach ($this->groups as $key => $value) 
+		{
 			if ($num > $count)
 			{
 				$value->visibility = true;
@@ -554,11 +555,6 @@ class Group
 		$this->data[$year]["net"] = $this->data[$year]["income"] + $this->data[$year]["cost"];
 		$this->calculateTotal($year);
 	}
-}
-
-class Disaster
-{
-
 }
 
 class Climate_Variable
