@@ -1,0 +1,78 @@
+/*****************************************************************
+
+* Show and Hide Rows
+*
+* ****************************************************************/
+/*function hideRows()
+{
+    $("#hideMenu li").click(function(e) {
+      e.preventDefault();
+      var text = $( this ).text();
+      
+      if(text == "Emissions Growth")
+      {
+         
+        var elem = $("#emissionsGrowth")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "CO2 PPM")
+      {
+         
+        var elem = $("#carbonPPM")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "CO2 Radiative Forcing")
+      {
+         
+        var elem = $("#carbonRadioative")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "Ocean Heat Storage")
+      {
+         
+        var elem = $("#oceanHeat")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "Temperature Increase")
+      {
+         
+        var elem = $("#temperatureIncrease")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "Disaster Risk")
+      {
+         
+        var elem = $("#disasterRisk")
+        elem.toggle('slow');
+
+      }
+
+      else if(text == "Show All Rows")
+      {
+         
+        var elem = $(".variablesRow")
+        elem.show('slow');
+
+      }
+
+      else if(text == "Hide All Rows")
+      {
+         
+        var elem = $(".variablesRow")
+        elem.hide('slow');
+
+      }
+
+    });
+}
+*/

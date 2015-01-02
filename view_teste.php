@@ -4,112 +4,21 @@
     <title> CC Model</title>
     <meta charset = "utf-8"/>
 
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"> -->
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- CSS Flat -->
+<link rel="stylesheet" type="text/css" href="css/bootstrap-flatly.min.css">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<!-- Fontawesome Icons -->
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-<script type = "text/javascript" language = "javascript">
-    
- var url = "controller.php?" + "year=";
+<!-- Custom CSS -->
+<link rel="stylesheet" href="css/css-custom.css">
 
-$( document ).ready(function() {
-     
-    loadTable(2010);
-
-});
-
-
-function loadTable(year, additional_params)
-{
-  additional_params = typeof additional_params !== 'undefined' ? additional_params : "";
-  //alert(year);
-   $("#scenario-table").load(url + year + additional_params, 
-
-        function prevent()
-        {
-          $( ".years" ).click(function( event ) {
-         //alert( event.isDefaultPrevented() ); // false
-         event.preventDefault();
-         //alert( event.isDefaultPrevented() ); // true
-
-          year = $(this).text();
-          loadTable(year);
-        });
-
-          $(".choice").change(function() {
-              additional_params = "";
-              additional_params += "&group_name=" + $(this).attr('name');
-              additional_params += "&group_value=" + $(this).val();
-              // alert(additional_params);
-              loadTable(year, additional_params)     
-          });
-
-          $("#danger").click(function( event ) {
-              event.preventDefault();
-              additional_params = "";
-              additional_params += "&disaster=true";
-              loadTable(year, additional_params)     
-          });
-
-          $(".num_groups").click(function( event ) {
-              event.preventDefault();
-              groups = $(this).text();
-              additional_params = "";
-              additional_params += "&num_groups="+groups;
-              loadTable(year, additional_params)     
-          });
-
-
-     });
-
-}
-
-// function changeGroups()
-// {
-
-// }
-
-// var choices = []; 
-
-// function getChoice()
-// {
-  
-//   $('.choice :selected').each(function(i, selected){ 
-//     choices[i] = $(selected).val(); 
-//   });
-
-//   loadChoice();
-//   alert(choices);
-// }
-
-// function loadChoice()
-// {
-  
-//   //var choiceArray = choices.serializeArray()
-
-//   $.ajax({
-//      type: "GET",
-//      url: "controller.php",
-//      // async: false,
-//      data:  {choices:choices},
-//      // dataType: "json",
-//      // data: JSON.stringify({ choices: choices }),
-//      success: function(r){
-//        // $('.answer').html(msg);
-//        alert("Enviei decisao: "+r.responseText);
-//      }
-//   });
-// }
-
-
-</script>
 
 
 
@@ -117,7 +26,7 @@ function loadTable(year, additional_params)
     
   <body>
 
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default navbar-inverse" role="navigation">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -130,7 +39,7 @@ function loadTable(year, additional_params)
       <a class="navbar-brand" href="#">Climate Change Models</a>
     </div>
 
-
+    
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
@@ -146,7 +55,7 @@ function loadTable(year, additional_params)
             <li><a href="#">Create a Scenario</a></li>
           </ul>
         </li> -->
-        <li class="dropdown">
+        <!-- <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hide Rows <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="#">Emissions Growth</a></li>
@@ -160,8 +69,8 @@ function loadTable(year, additional_params)
             <li class="divider"></li>
             <li><a href="#">Show all Rows</a></li>
           </ul>
-        </li>
-        <li class="dropdown">
+        </li> -->
+        <!-- <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Number of Groups <span class="caret"></span></a>
           <ul class="dropdown-menu" role="menu">
             <li><a class="num_groups" href="#">1</a></li>
@@ -181,7 +90,7 @@ function loadTable(year, additional_params)
             <li><a class="num_groups" href="#">15</a></li>
             <li><a class="num_groups" href="#">16</a></li>
           </ul>
-        </li>
+        </li> -->
       </ul>
 <!--       <ul class="nav navbar-nav navbar-right">
         <li><button type="button" class="btn btn-default navbar-btn">Sign in</button></li>
@@ -190,13 +99,84 @@ function loadTable(year, additional_params)
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
-
-    <div class="container" id="scenario-table">
-<!--     <table class="table" >
-
-    </table>
-
-      </table> -->
+    
+    
+    <div class="container" id="main-container">
+      <div class="row">
+        
+        <div class="container" id="wrapper">
+          <!-- CORRIGIR RESPONSIVENESS DAS COLUNAS - Criar 2 colunas de 6 e duas de 6 dentro de cada!! -->
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
+                <div class="col-xs-6 pull-left">
+                  <p class="options"><i class="fa fa-toggle-on"></i>Show/Hide Rows</p>
+                </div>
+                <div class="col-xs-6 pull-right">
+                  <!-- Hide & Show Hows - Begin -->
+                  <div class="dropdown">
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                      Select Row
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="hideMenu">
+                      <li><a href="#" name="emissionsGrowth">Emissions Growth</a></li>
+                      <li><a href="#" name="carbonPPM">CO2 PPM</a></li>
+                      <li><a href="#" name="carbonRadioative">CO2 Radiative Forcing</a></li>
+                      <li><a href="#" name="oceanHeat">Ocean Heat Storage</a></li>
+                      <li><a href="#" name="temperatureIncrease">Temperature Increase</a></li>
+                      <li><a href="#" name="disasterRisk">Disaster Risk</a></li>
+                      <li class="divider"></li>
+                      <li><a href="#" name="variablesRow">Show All Rows</a></li>
+                      <li><a href="#" name="variablesRow">Hide All Rows</a></li>
+                    </ul>
+                  </div>
+                  <!-- Hide & Show Hows - End -->
+                </div>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-right">
+                <div class="col-xs-6 pull-left">
+                  <p class="options"><i class="fa fa-users fa-fw"></i>Number of Groups</p>
+                </div>
+                <div class="col-xs-6 pull-right">
+                  <!-- Input Group - Increment and Decrement Grous -->
+                   <div style="width: 150px;">
+                     <div class="input-group">
+                          <span class="input-group-btn groupsInput">
+                              <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                  <span class="glyphicon glyphicon-minus"></span>
+                              </button>
+                          </span>
+                          <input type="text" id="input-info" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                          <span class="input-group-btn groupsInput">
+                              <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+                                  <span class="glyphicon glyphicon-plus"></span>
+                              </button>
+                          </span>
+                      </div>                  
+                   </div>
+                  <!-- Input Group - End -->
+                </div>
+              </div>
+          </div>
+      <div class="container" id="scenario-table">
+    <!--     <table class="table" >
+    
+        </table>
+    
+          </table> -->
+        </div>
+        <div class="container" id="getDisaster">
+          <button type='button' class='btn btn-danger' id='danger'><i class="fa fa-bolt"></i>Check Disaster</button>
+        </div>
     </div>
+
+   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+    <!-- Custom Javascript -->
+    <script type="text/javascript" src="js/js-custom.js"></script>
+
  </body>
 </html>
