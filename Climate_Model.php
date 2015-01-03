@@ -464,7 +464,7 @@ class Group
 		}
 
 		$name = "group" . $this->group_name;
-		$html_string = "<tr id='groupRow" . $this->group_id . "'>\n";
+		$html_string = "<tr class='groupRow' id='groupRow" . $this->group_id . "'>\n";
 
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
                 "<td id='". $name ."Total'" . "class='text-center decisionRow'" . ">". $this->data[$year]["total"] . "</td>" .
