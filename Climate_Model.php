@@ -49,22 +49,22 @@ class Climate_Model
 		);
 
 		$this->groups = array(
-			"A" => new Group("A"),
-			"B" => new Group("B"),
-			"C" => new Group("C"),
-			"D" => new Group("D"),
-			"E" => new Group("E"),
-			"F" => new Group("F"),
-			"G" => new Group("G"),
-			"H" => new Group("H"),
-			"I" => new Group("I"),
-			"J" => new Group("J"),
-			"K" => new Group("K"),
-			"L" => new Group("L"),
-			"M" => new Group("M"),
-			"N" => new Group("N"),
-			"O" => new Group("O"),
-			"P" => new Group("P")
+			"A" => new Group("A", 1),
+			"B" => new Group("B", 2),
+			"C" => new Group("C", 3),
+			"D" => new Group("D", 4),
+			"E" => new Group("E", 5),
+			"F" => new Group("F", 6),
+			"G" => new Group("G", 7),
+			"H" => new Group("H", 8),
+			"I" => new Group("I", 9),
+			"J" => new Group("J", 10),
+			"K" => new Group("K", 11),
+			"L" => new Group("L", 12),
+			"M" => new Group("M", 13),
+			"N" => new Group("N", 14),
+			"O" => new Group("O", 15),
+			"P" => new Group("P", 16)
 		);
 	}
 
@@ -106,6 +106,10 @@ class Climate_Model
 				"</div>";*/
 		$this->displayGroups($year);
 		echo "</table>";
+
+		echo " <div class='container' id='getDisaster'>" .
+		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
+	    	 " </div>";
 	}
 
 	function displayGroups($year)
@@ -125,6 +129,7 @@ class Climate_Model
         echo $header;
 		foreach ($this->groups as $key => $value)
 			$value->displayGroup($year);
+
 	}
 
 	function cloneScenario($year)
@@ -215,22 +220,22 @@ class Climate_Model
 		// echo "<p> The disaster risk is: " . $risk . "</p>";
 	}
 
-	function setNumberGroups($num)
-	{
-		$count = 0;
-		foreach ($this->groups as $key => $value) {
-			if ($num > $count)
-			{
-				$value->visibility = true;
-				$count++;
-			}
-			else
-			{
-				$value->visibility = false;
-				$count++;
-			}
-		}	
-	}
+	// function setNumberGroups($num)
+	// {
+	// 	$count = 0;
+	// 	foreach ($this->groups as $key => $value) {
+	// 		if ($num > $count)
+	// 		{
+	// 			$value->visibility = true;
+	// 			$count++;
+	// 		}
+	// 		else
+	// 		{
+	// 			$value->visibility = false;
+	// 			$count++;
+	// 		}
+	// 	}	
+	// }
 
 }
 
@@ -412,10 +417,13 @@ class Group
 
 	var $visibility;
 
+	var $group_id;
 
-	function Group($name)
+
+	function Group($name, $id)
 	{
 		$this->group_name = $name;
+		$this->group_id = $id;
 
 		$group_variables = array(
 			"decision" => null,
@@ -456,7 +464,7 @@ class Group
 		}
 
 		$name = "group" . $this->group_name;
-		$html_string = "<tr>\n";
+		$html_string = "<tr id='groupRow" . $this->group_id . "'>\n";
 
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
                 "<td id='". $name ."Total'" . "class='text-center decisionRow'" . ">". $this->data[$year]["total"] . "</td>" .
@@ -479,9 +487,11 @@ class Group
         //onchange='getChoice()'
         $html_string .= "</tr>";
 
-		if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		// if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		if ($this->data[$year]["alive"] == true)
         	echo $html_string;
-        elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
+        else
+        // elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
         	echo "<tr style='background-color: red; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
 	}
 

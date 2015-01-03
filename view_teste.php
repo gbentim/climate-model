@@ -163,10 +163,10 @@
         </table>
     
           </table> -->
-        </div>
+<!--         </div>
         <div class="container" id="getDisaster">
           <button type='button' class='btn btn-danger' id='danger'><i class="fa fa-bolt"></i>Check Disaster</button>
-        </div>
+        </div> -->
     </div>
 
    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
