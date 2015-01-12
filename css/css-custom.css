@@ -6,7 +6,7 @@ body{
 {
 	background-color: white;
 	border-radius: 6px;
-	padding: 20px 0;
+	/*padding: 20px 0;*/
 	/*border: 1px solid black;*/
 }
 
@@ -32,8 +32,8 @@ body{
 
 .options {
 	margin-top: 4%;
-	font-size: 1.1em;
-	float: right;
+	font-size: 14px;
+	/*float: right;*/
 }
 
 .main-header > a {
@@ -79,4 +79,12 @@ border-radius: 0;
 
 
 /*Increment and Decrement Groups Input Buttons*/
+.input-group {
+width: 40%;
+margin: 0 auto;
+}
 
+#input-info
+{
+	text-align: center;
+}

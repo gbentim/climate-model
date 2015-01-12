@@ -62,70 +62,82 @@
                 <!-- Start of Container that Wraps Header -->
                 <div class="container" id="wrapper">
                     
-                    <!-- Start of Header Big Left Column -->
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-left">
-                        
-                        <!-- Start of Left Column of Header Big Left Column -->
-                        <div class="col-xs-6 pull-left">
-                            
-                            <p class="options"><i class="fa fa-eye"></i>Show/Hide Rows</p>
-                        
-                        <!-- End of Left Column of Header Big Left Column -->
-                        </div>
-                        
-                        <!-- Start of Right Column of Header Big Left Column -->
-                        <div class="col-xs-6 pull-right">
-                         
-                          <!-- Start of Hide & Show DropDown -->
-                            <div class="dropdown">
-                                
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"><i class="fa fa-eye"></i>Show/Hide Rows</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
+                              <!-- Start of Hide & Show DropDown -->
+                              <div class="dropdown">
                                   
-                                  Select Row
-                                  <span class="caret"></span>
-                                
-                                </button>
-                                
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="hideMenu">
+                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
                                     
-                                    <li><a href="#" name="emissionsGrowth">Emissions Growth</a></li>
-                                    <li><a href="#" name="carbonPPM">CO2 PPM</a></li>
-                                    <li><a href="#" name="carbonRadioative">CO2 Radiative Forcing</a></li>
-                                    <li><a href="#" name="oceanHeat">Ocean Heat Storage</a></li>
-                                    <li><a href="#" name="temperatureIncrease">Temperature Increase</a></li>
-                                    <li><a href="#" name="disasterRisk">Disaster Risk</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#" name="variablesRow">Show All Rows</a></li>
-                                    <li><a href="#" name="variablesRow">Hide All Rows</a></li>
-                                
-                                </ul>
-                            
-                            <!-- End of Hide & Show DropDown -->
-                            </div>
-                         
-                          <!-- End of Right Column of Header Big Left Column -->
-                        </div>
-                    
-                    <!-- End of Header Big Left Column -->
-                    </div>
-                    
-                    <!-- Start of Header Big Right Column -->
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 pull-right">
-                      
-                      <!-- Start of Left Column of Header Big Right Column -->
-                        <div class="col-xs-6 pull-left">
-                            
-                            <p class="options"><i class="fa fa-users fa-fw"></i>Number of Groups</p>
-                        
-                        <!-- End of Left Column of Header Big Right Column -->
-                        </div>
-                      
-                      <!-- Start of Right Column of Header Big Right Column -->
-                      <div class="col-xs-6 pull-right">
-                          
-                          <!-- Start of Increment/ Decrement Group Buttons -->
-                          <div style="width: 150px;">
+                                    Select Row
+                                    <span class="caret"></span>
+                                  
+                                  </button>
+                                  
+                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="hideMenu">
+                                      
+                                      <li><a href="#" name="emissionsGrowth">Emissions Growth</a></li>
+                                      <li><a href="#" name="carbonPPM">CO2 PPM</a></li>
+                                      <li><a href="#" name="carbonRadioative">CO2 Radiative Forcing</a></li>
+                                      <li><a href="#" name="oceanHeat">Ocean Heat Storage</a></li>
+                                      <li><a href="#" name="temperatureIncrease">Temperature Increase</a></li>
+                                      <li><a href="#" name="disasterRisk">Disaster Risk</a></li>
+                                      <li><a href="#" name="originalRisk">Original Risk</a></li>
+                                      <li class="divider"></li>
+                                      <li><a href="#" name="variablesRow">Show All Rows</a></li>
+                                      <li><a href="#" name="variablesRow">Hide All Rows</a></li>
+                                  
+                                  </ul>
                               
+                              <!-- End of Hide & Show DropDown -->
+                              </div>
+                          </div>
+                      </div>
+                   </div>
+
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"> <i class="fa fa-line-chart"></i>See Disaster Chart</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">
+                              Disaster Chart
+                            </button>
+                          </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Chart</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div id="chart" style="width:500px; height:400px;"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                   </div>
+
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"><i class="fa fa-users fa-fw"></i>Number of Groups</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
                               <div class="input-group">
                                   
                                   <span id="decrement" class="input-group-btn groupsInput">
@@ -136,7 +148,7 @@
 
                                   </span>
                                   
-                                  <input type="text" readonly="readonly" id="input-info" name="quant[1]" class="form-control input-number" value="0" min="0" max="16">
+                                  <input type="text" id="input-info" name="quant[1]" class="form-control input-number" value="0" min="0" max="16">
                                   
                                   <span id="increment" class="input-group-btn groupsInput">
                                       
@@ -145,16 +157,10 @@
                                       </button>
                                   
                                   </span>
-                              </div>                  
-                          
-                          <!-- End of Increment/ Decrement Group Buttons -->
+                              </div> 
                           </div>
-                      
-                      <!-- End of Right Column of Header Big Right Column -->
                       </div>
-                    
-                    <!-- End of Header Big Right Column -->
-                    </div>
+                   </div>
                 
                 <!-- End of Container that Wraps Header -->
                 </div>
@@ -174,6 +180,11 @@
             <!-- End of Row of Game Tables -->
             </div>
 
+            <div class="row">
+                
+            </div>
+
+
         <!-- End of Main Container -->
         </div>
 
@@ -188,6 +199,12 @@
 
         <!-- Bootstrap Javascript Local Copy -->
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
+        <!-- HighChart Local Copy -->
+        <script type="text/javascript" src="js/highcharts.js"></script>
+
+        <!-- HighChart The -->
+        <!--<script type="text/javascript" src="/js/themes/gray.js"></script>-->
 
         <!-- Custom Javascript -->
         <script type="text/javascript" src="js/js-custom.js"></script>

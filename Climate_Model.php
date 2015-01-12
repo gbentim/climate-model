@@ -88,6 +88,12 @@ class Climate_Model
 		$this->scenarios[$year]->displayTable();
 
 		echo "</table>";
+
+		echo " <div class='container' id='getDisaster'>" .
+		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
+	    	 " </div>";
+
+
 		echo "<table class='table'>";
 		echo "<hr>";
 		//echo "<hr>";
@@ -107,9 +113,7 @@ class Climate_Model
 		$this->displayGroups($year);
 		echo "</table>";
 
-		echo " <div class='container' id='getDisaster'>" .
-		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
-	    	 " </div>";
+
 	}
 
 	function displayGroups($year)
@@ -247,6 +251,9 @@ class Scenario
 	// last year for every iteration
 	const LAST_YEAR = 2100;
 
+	// first year for every iteration
+	const FIRST_YEAR = 2010;
+
 	// integer with the current year for the scenario
 	var $current_year;
 
@@ -263,7 +270,8 @@ class Scenario
 			"CO2_Radiative_Forcing" => new Climate_Variable("carbonRadioative","CO<sub>2</sub> Radiative Forcing", $this->current_year, 0, "round2decimals"),
 			"Temperature_Increase" => new Climate_Variable("temperatureIncrease", "Temp Increase (&deg;C)", $this->current_year, 0, "round2decimals"),
 			"Ocean_Heat_Storage" => new Climate_Variable("oceanHeat", "Ocean Heat Storage (&deg;C)", $this->current_year, 0, "round2decimals"),
-			"Disaster_Risk" => new Climate_Variable("disasterRisk", "Disaster Risk", $this->current_year, 0, "round")
+			"Disaster_Risk" => new Climate_Variable("disasterRisk", "Disaster Risk", $this->current_year, 0, "round"),
+			"Original_Risk" => new Climate_Variable("originalRisk", "Original Disaster Risk", $this->current_year, 0, "")
 		);
 
 		$this->updateAll();
@@ -277,7 +285,8 @@ class Scenario
 			"CO2_Radiative_Forcing" => clone $this->climate_variables["CO2_Radiative_Forcing"],
 			"Temperature_Increase" => clone $this->climate_variables["Temperature_Increase"],
 			"Ocean_Heat_Storage" => clone $this->climate_variables["Ocean_Heat_Storage"],
-			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"]
+			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"],
+			"Original_Risk" => clone $this->climate_variables["Original_Risk"]
 		);
 	}
 
@@ -295,6 +304,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Temperature_Increase"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Disaster_Risk"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Original_Risk"]->setCurrentYear($this->current_year);
 	}
 
 	function displayTable()
@@ -305,6 +315,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->displayPredictions();
    		$this->climate_variables["Temperature_Increase"]->displayPredictions();
    		$this->climate_variables["Disaster_Risk"]->displayPredictions();
+   		$this->climate_variables["Original_Risk"]->displayPredictions();
 	}
 
 	function updateAll()
@@ -315,6 +326,7 @@ class Scenario
 		$this->updateOceanHeat();
 		$this->updateTempIncrease();
 		$this->updateDisasterRisk();
+		$this->updateOriginalRisk();
 	}
 	
 	function setEmissionsGrowth($value)
@@ -383,6 +395,18 @@ class Scenario
     		if ($this->climate_variables["Disaster_Risk"]->predictions[$x] > 100)
     			$this->climate_variables["Disaster_Risk"]->predictions[$x] = 100;
     	}
+	}
+
+	function updateOriginalRisk()
+	{
+		$this->climate_variables["Original_Risk"]->predictions[2010] = 3;
+		$this->climate_variables["Original_Risk"]->predictions[2025] = 5;
+		$this->climate_variables["Original_Risk"]->predictions[2040] = 9;
+		$this->climate_variables["Original_Risk"]->predictions[2055] = 17;
+		$this->climate_variables["Original_Risk"]->predictions[2070] = 38;
+		$this->climate_variables["Original_Risk"]->predictions[2085] = 90;
+		$this->climate_variables["Original_Risk"]->predictions[2100] = 100;
+
 	}
 
 	function sumOceanHeat($end_year)
@@ -464,7 +488,7 @@ class Group
 		}
 
 		$name = "group" . $this->group_name;
-		$html_string = "<tr class='groupRow' id='groupRow" . $this->group_id . "'>\n";
+		$html_string = "<tr style='display:none;' class='groupRow' id='groupRow" . $this->group_id . "'>\n";
 
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
                 "<td id='". $name ."Total'" . "class='text-center decisionRow'" . ">". $this->data[$year]["total"] . "</td>" .
@@ -607,7 +631,7 @@ class Climate_Variable
 	// choose the formatting option for display
 	var $formatting_options;
 
-	function Climate_Variable($rowID, $name, $year, $value, $option) 
+	function Climate_Variable($rowID, $name, $year, $value, $option, $preset="") 
 	{
 		$this->rowID = $rowID;
 		$this->name = $name;
@@ -661,7 +685,7 @@ class Climate_Variable
 			else
 				$style = "";
 
-			$html_string .= "<td class='col" . $year_id . " text-center" . $style . "'>" . $this->convertDisplay($value) . "</td>";
+			$html_string .= "<td id='" . $year_id . $this->rowID . "' class='col" . $year_id . " text-center" . $style . "'>" . $this->convertDisplay($value) . "</td>";
 			$year_id = $year_id + self::INCREMENT;
 		}
 		$html_string .= "</tr>\n";

@@ -2,11 +2,14 @@
 * JQUERY 'DOCUMENT READY' FUNCTION
 * Only runs Jquery Functions when the whole document is ready
 * ****************************************************************/
+
+var url = "controller.php?" + "year=";
 $( document ).ready(function()
 // Open Function Bracket. The Closing Bracket of this function is at the end of the script 
 {
-    
-    var url = "controller.php?" + "year=";
+    // var url = "controller.php?" + "year=";
+
+    // hideGroupsRows();
 
     loadTable(2010);
 
@@ -14,9 +17,9 @@ $( document ).ready(function()
 
     hideVariablesRows();
 
-    hideGroupsRows();
+    // hideGroupsRows();
 
-
+});
 
 
 /*****************************************************************
@@ -61,37 +64,46 @@ function hideVariablesRows()
 * ****************************************************************/
 function hideGroupsRows()
 {
+
+    var num = $("#input-info").val();
+
+    $('.groupRow').hide();
+ 
     
-    // Hide All Groups when Program Starts
-    $(window).load(function()
+    for(x=1; x<=num; x++)
     {
-      $('.groupRow').hide();
-    });
-    
+       $( "#groupRow" + x ).show();
+    }
 
     // Decremente One Group
     $("#decrement").click(function( event ) {
         event.preventDefault();
         
-        var decrement = parseInt($("#input-info").val()) + 1;
+        /*var decrement = parseInt($("#input-info").val()) + 1;
        
-      if(!decrement < 1)
-      {
-        $( "#groupRow" + decrement ).hide('slow');
-      } 
-                      
+        if(!decrement < 1)
+        {
+          $( "#groupRow" + decrement ).hide('slow');
+        } */
+        
+      hideGroupsRows();              
         
     });
 
     // Increment One Group
     $("#increment").click(function( event ) {
         event.preventDefault();
-        var increment = $("#input-info").val();
+        /*var increment = $("#input-info").val();
        
-        $( "#groupRow" + increment ).show('slow');
+        $( "#groupRow" + increment ).show('slow');*/
+
+        hideGroupsRows();
 
     });
 
+    $("#input-info").on("input", function() {
+        hideGroupsRows();
+    });
 }
 
 
@@ -211,6 +223,76 @@ function loadTable(year, additional_params)
 
      });
 
+   setTimeout(function(){
+     hideGroupsRows();
+   }, 50);
+  
+  // groupsInput();
+
+  // hideVariablesRows();
+
+  // hideGroupsRows();
+  
+  setTimeout(function(){
+     loadChart();
+   }, 50);
+
+}
+
+
+/*****************************************************************
+* GRAPHIC
+* 
+* ****************************************************************/
+function loadChart()
+{
+
+        var data10 = parseInt($('#2010disasterRisk').text());
+        var data25 = parseInt($('#2025disasterRisk').text());
+        var data40 = parseInt($('#2040disasterRisk').text());
+        var data55 = parseInt($('#2055disasterRisk').text());
+        var data70 = parseInt($('#2070disasterRisk').text());
+        var data85 = parseInt($('#2085disasterRisk').text());
+        var data100 = parseInt($('#2100disasterRisk').text());
+
+        $('#chart').highcharts({
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'Disaster Risk Comparison Chart'
+            },
+            subtitle: {
+                text: 'Climate Change Model'
+            },
+            xAxis: {
+                categories: ['2010', '2025', '2040', '2055', '2070', '2085', '2100']
+            },
+            yAxis: {
+                title: {
+                    text: 'Risk (%)'
+                },
+
+                min: 0, max: 100
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Current Disaster Risk',
+                data: [data10, data25, data40, data55, data70, data85, data100]
+            }, {
+                name: 'Original Disaster Risk',
+                data: [3, 5, 9, 17, 38, 90, 100]
+            }]
+        });
+  
+
 }
 
 
@@ -227,4 +309,4 @@ function loadTable(year, additional_params)
 
 
 // END of DocumentReady
-});
+// });
