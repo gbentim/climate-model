@@ -241,6 +241,7 @@ class Climate_Model
 	// 	}	
 	// }
 
+
 }
 
 class Scenario
@@ -601,11 +602,6 @@ class Group
 		$this->data[$year]["net"] = $this->data[$year]["income"] + $this->data[$year]["cost"];
 		$this->calculateTotal($year);
 	}
-}
-
-class Disaster
-{
-
 }
 
 class Climate_Variable
