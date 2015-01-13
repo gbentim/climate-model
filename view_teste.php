@@ -1,202 +1,213 @@
 <!DOCTYPE html>
 <html lang="en" >
-  <head>
-    <title> CC Model</title>
-    <meta charset = "utf-8"/>
+    <head>
+      
+      <title> CC Model</title>
+      <meta charset = "utf-8"/>
 
-    <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+      <!-- CSS Flat -->
+      <link rel="stylesheet" type="text/css" href="css/bootstrap-flatly.min.css">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <!-- Fontawesome Icons -->
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+      <!-- Custom CSS -->
+      <link rel="stylesheet" href="css/css-custom.css">
 
-<script type = "text/javascript" language = "javascript">
-    
- var url = "controller.php?" + "year=";
+    </head>
 
-$( document ).ready(function() {
-     
-    loadTable(2010);
+    <body>
 
-});
+        <!-- Start of Navigation Menu -->
+        <nav class="navbar navbar-default navbar-inverse" role="navigation">
+            
+            <div class="container-fluid">
+              
+              <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    
+                    <a class="navbar-brand" href="#">Climate Change Models</a>
+                
+                </div>
+
+              <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    
+                    <ul class="nav navbar-nav">
+                    </ul>
+
+                </div><!-- /.navbar-collapse -->
+
+            </div><!-- /.container-fluid -->
+        
+        <!-- End of Navigation Menu -->
+        </nav>
+
+        <!-- Start of Main Container -->
+        <div class="container" id="main-container">
+            
+            <!-- Start of Row of Header -->
+            <div class="row">
+               
+                <!-- Start of Container that Wraps Header -->
+                <div class="container" id="wrapper">
+                    
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"><i class="fa fa-eye"></i>Show/Hide Rows</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
+                              <!-- Start of Hide & Show DropDown -->
+                              <div class="dropdown">
+                                  
+                                  <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                                    
+                                    Select Row
+                                    <span class="caret"></span>
+                                  
+                                  </button>
+                                  
+                                  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="hideMenu">
+                                      
+                                      <li><a href="#" name="emissionsGrowth">Emissions Growth</a></li>
+                                      <li><a href="#" name="carbonPPM">CO2 PPM</a></li>
+                                      <li><a href="#" name="carbonRadioative">CO2 Radiative Forcing</a></li>
+                                      <li><a href="#" name="oceanHeat">Ocean Heat Storage</a></li>
+                                      <li><a href="#" name="temperatureIncrease">Temperature Increase</a></li>
+                                      <li><a href="#" name="disasterRisk">Disaster Risk</a></li>
+                                      <li><a href="#" name="originalRisk">Original Risk</a></li>
+                                      <li class="divider"></li>
+                                      <li><a href="#" name="variablesRow">Show All Rows</a></li>
+                                      <li><a href="#" name="variablesRow">Hide All Rows</a></li>
+                                  
+                                  </ul>
+                              
+                              <!-- End of Hide & Show DropDown -->
+                              </div>
+                          </div>
+                      </div>
+                   </div>
+
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"> <i class="fa fa-line-chart"></i>See Disaster Chart</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#myModal">
+                              Disaster Chart
+                            </button>
+                          </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">Chart</h4>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div id="chart" style="width:500px; height:400px;"></div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                      </div>
+                   </div>
+
+                   <div class="col-md-4">
+                      <div class="row text-center">
+                          <p class="options"><i class="fa fa-users fa-fw"></i>Number of Groups</p>
+                      </div>
+                      <div class="row">
+                          <div class="span7 text-center">
+                              <div class="input-group">
+                                  
+                                  <span id="decrement" class="input-group-btn groupsInput">
+                                      
+                                      <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                          <span class="glyphicon glyphicon-minus"></span>
+                                      </button>
+
+                                  </span>
+                                  
+                                  <input type="text" id="input-info" name="quant[1]" class="form-control input-number" value="0" min="0" max="16">
+                                  
+                                  <span id="increment" class="input-group-btn groupsInput">
+                                      
+                                      <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+                                          <span class="glyphicon glyphicon-plus"></span>
+                                      </button>
+                                  
+                                  </span>
+                              </div> 
+                          </div>
+                      </div>
+                   </div>
+                
+                <!-- End of Container that Wraps Header -->
+                </div>
+
+            <!-- End of Row of Header -->
+            </div>
+            
+            <!-- Start of Row of Game Tables -->
+            <div class="row">
+
+                <!-- Start of Game Tables -->
+                <div class="container" id="scenario-table">
+                
+                <!-- End Game Tables -->
+                </div>
+
+            <!-- End of Row of Game Tables -->
+            </div>
+
+            <div class="row">
+                
+            </div>
 
 
-function loadTable(year, additional_params)
-{
-  additional_params = typeof additional_params !== 'undefined' ? additional_params : "";
-  //alert(year);
-   $("#scenario-table").load(url + year + additional_params, 
+        <!-- End of Main Container -->
+        </div>
 
-        function prevent()
-        {
-          $( ".years" ).click(function( event ) {
-         //alert( event.isDefaultPrevented() ); // false
-         event.preventDefault();
-         //alert( event.isDefaultPrevented() ); // true
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> -->
+        
+        <!-- Jquery Local Copy -->
+        <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 
-          year = $(this).text();
-          loadTable(year);
-        });
+        <!-- Latest compiled and minified JavaScript -->
+        <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script> -->
 
-          $(".choice").change(function() {
-              additional_params = "";
-              additional_params += "&group_name=" + $(this).attr('name');
-              additional_params += "&group_value=" + $(this).val();
-              // alert(additional_params);
-              loadTable(year, additional_params)     
-          });
+        <!-- Bootstrap Javascript Local Copy -->
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
 
-          $("#danger").click(function( event ) {
-              event.preventDefault();
-              additional_params = "";
-              additional_params += "&disaster=true";
-              loadTable(year, additional_params)     
-          });
+        <!-- HighChart Local Copy -->
+        <script type="text/javascript" src="js/highcharts.js"></script>
 
-          $(".num_groups").click(function( event ) {
-              event.preventDefault();
-              groups = $(this).text();
-              additional_params = "";
-              additional_params += "&num_groups="+groups;
-              loadTable(year, additional_params)     
-          });
+        <!-- HighChart The -->
+        <!--<script type="text/javascript" src="/js/themes/gray.js"></script>-->
 
+        <!-- Custom Javascript -->
+        <script type="text/javascript" src="js/js-custom.js"></script>
 
-     });
-
-}
-
-// function changeGroups()
-// {
-
-// }
-
-// var choices = []; 
-
-// function getChoice()
-// {
-  
-//   $('.choice :selected').each(function(i, selected){ 
-//     choices[i] = $(selected).val(); 
-//   });
-
-//   loadChoice();
-//   alert(choices);
-// }
-
-// function loadChoice()
-// {
-  
-//   //var choiceArray = choices.serializeArray()
-
-//   $.ajax({
-//      type: "GET",
-//      url: "controller.php",
-//      // async: false,
-//      data:  {choices:choices},
-//      // dataType: "json",
-//      // data: JSON.stringify({ choices: choices }),
-//      success: function(r){
-//        // $('.answer').html(msg);
-//        alert("Enviei decisao: "+r.responseText);
-//      }
-//   });
-// }
-
-
-</script>
-
-
-
-  </head>
-    
-  <body>
-
-<nav class="navbar navbar-default" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="#">Climate Change Models</a>
-    </div>
-
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <ul class="nav navbar-nav">
-        <!-- <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scenarios <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Pre-set Scenario 1</a></li>
-            <li><a href="#">Pre-set Scenario 2</a></li>
-            <li><a href="#">Pre-set Scenario 3</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Save Current Scenario</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Create a Scenario</a></li>
-          </ul>
-        </li> -->
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Hide Rows <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Emissions Growth</a></li>
-            <li><a href="#">CO2 PPM</a></li>
-            <li><a href="#">CO2 Radiative Forcing</a></li>
-            <li><a href="#">Temperature Increase</a></li>
-            <li><a href="#">Ocean Heat Storage</a></li>
-            <li><a href="#">Disaster Risk</a></li>
-            <li><a href="#">Previous Disaster Risk</a></li>
-            <li><a href="#">Original Disaster Risk</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Show all Rows</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Number of Groups <span class="caret"></span></a>
-          <ul class="dropdown-menu" role="menu">
-            <li><a class="num_groups" href="#">1</a></li>
-            <li><a class="num_groups" href="#">2</a></li>
-            <li><a class="num_groups" href="#">3</a></li>
-            <li><a class="num_groups" href="#">4</a></li>
-            <li><a class="num_groups" href="#">5</a></li>
-            <li><a class="num_groups" href="#">6</a></li>
-            <li><a class="num_groups" href="#">7</a></li>
-            <li><a class="num_groups" href="#">8</a></li>
-            <li><a class="num_groups" href="#">9</a></li>
-            <li><a class="num_groups" href="#">10</a></li>
-            <li><a class="num_groups" href="#">11</a></li>
-            <li><a class="num_groups" href="#">12</a></li>
-            <li><a class="num_groups" href="#">13</a></li>
-            <li><a class="num_groups" href="#">14</a></li>
-            <li><a class="num_groups" href="#">15</a></li>
-            <li><a class="num_groups" href="#">16</a></li>
-          </ul>
-        </li>
-      </ul>
-<!--       <ul class="nav navbar-nav navbar-right">
-        <li><button type="button" class="btn btn-default navbar-btn">Sign in</button></li>
-        <li><button type="button" class="btn btn-default navbar-btn">Sign Up</button></li>
-      </ul> -->
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
-
-    <div class="container" id="scenario-table">
-<!--     <table class="table" >
-
-    </table>
-
-      </table> -->
-    </div>
- </body>
+    </body>
 </html>

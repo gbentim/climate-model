@@ -49,22 +49,22 @@ class Climate_Model
 		);
 
 		$this->groups = array(
-			"A" => new Group("A"),
-			"B" => new Group("B"),
-			"C" => new Group("C"),
-			"D" => new Group("D"),
-			"E" => new Group("E"),
-			"F" => new Group("F"),
-			"G" => new Group("G"),
-			"H" => new Group("H"),
-			"I" => new Group("I"),
-			"J" => new Group("J"),
-			"K" => new Group("K"),
-			"L" => new Group("L"),
-			"M" => new Group("M"),
-			"N" => new Group("N"),
-			"O" => new Group("O"),
-			"P" => new Group("P")
+			"A" => new Group("A", 1),
+			"B" => new Group("B", 2),
+			"C" => new Group("C", 3),
+			"D" => new Group("D", 4),
+			"E" => new Group("E", 5),
+			"F" => new Group("F", 6),
+			"G" => new Group("G", 7),
+			"H" => new Group("H", 8),
+			"I" => new Group("I", 9),
+			"J" => new Group("J", 10),
+			"K" => new Group("K", 11),
+			"L" => new Group("L", 12),
+			"M" => new Group("M", 13),
+			"N" => new Group("N", 14),
+			"O" => new Group("O", 15),
+			"P" => new Group("P", 16)
 		);
 	}
 
@@ -74,45 +74,66 @@ class Climate_Model
 			$this->cloneScenario($year);
 
 		// echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
-		echo "<table class='table'>" . 
+		echo "<table class='table' id='main-table'>" . 
 			 "<tr>" .
-			 "<th> Year </th>" .
-			 "<th><a href='' class='years'>2010</a></th>" .
-			 "<th><a href='' class='years'>2025</a></th>" .
-			 "<th><a href='' class='years'>2040</a></th>" .
-			 "<th><a href='' class='years'>2055</a></th>" .
-			 "<th><a href='' class='years'>2070</a></th>" .
-			 "<th><a href='' class='years'>2085</a></th>" .
-			 "<th><a href='' class='years'>2100</a></th></tr>";
+			 "<th class='main-header'> Year </th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2010'>2010</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2025'>2025</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2040'>2040</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2055'>2055</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2070'>2070</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2085'>2085</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2100'>2100</a></th></tr>";
 
 		$this->scenarios[$year]->displayTable();
 
 		echo "</table>";
+
+		echo " <div class='container' id='getDisaster'>" .
+		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
+	    	 " </div>";
+
+
 		echo "<table class='table'>";
 		echo "<hr>";
-		echo "<button type='button' class='btn btn-danger btn-block' id='danger'>Disaster</button>";
-		echo "<hr>";
+		//echo "<hr>";
+		/*echo  "<div class='row'>" .
+					"<div class='col-xs-3 col-xs-offset-3'>" .
+						"<div class='input-group number-spinner'>" .
+							"<span class='input-group-btn data-dwn'>" .
+								"<button class='btn btn-default btn-info data-dir=dwn'><span class='glyphicon glyphicon-minus'></span></button>" .
+							"</span>" .
+							"<input type='text' class='form-control text-center value='1' min='10' max='40'>" .
+							"<span class='input-group-btn data-up'>" .
+								"<button class='btn btn-default btn-info' data-dir='up'><span class='glyphicon glyphicon-plus'></span></button>" .
+							"</span>" .
+						"</div>" .
+					"</div>" .
+				"</div>";*/
 		$this->displayGroups($year);
 		echo "</table>";
+
+
 	}
 
 	function displayGroups($year)
 	{
 		// "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
 		$header = "<tr>" .
-          "<th> Group </th>" .
-          "<th> Total $ </th>" .
-          "<th> Develop </th>" .
-          "<th> Decision </th>" .
-          "<th> Income </th>" .
-          "<th> Disaster </th>" .
-          "<th> Cost </th>" .
-          "<th> Net </th>" .
+          "<th class='main-header'> Group </th>" .
+          "<th class='main-header text-center'> Total $ </th>" .
+          "<th class='main-header text-center'> Develop </th>" .
+          "<th class='main-header text-center'> Decision </th>" .
+          "<th class='main-header text-center'> Income </th>" .
+          "<th class='main-header text-center'> Disaster </th>" .
+          "<th class='main-header text-center'> Cost </th>" .
+          "<th class='main-header text-center'> Net </th>" .
         "</tr>";
 
         echo $header;
 		foreach ($this->groups as $key => $value)
 			$value->displayGroup($year);
+
 	}
 
 	function cloneScenario($year)
@@ -203,23 +224,23 @@ class Climate_Model
 		// echo "<p> The disaster risk is: " . $risk . "</p>";
 	}
 
-	function setNumberGroups($num)
-	{
-		$count = 0;
-		foreach ($this->groups as $key => $value) 
-		{
-			if ($num > $count)
-			{
-				$value->visibility = true;
-				$count++;
-			}
-			else
-			{
-				$value->visibility = false;
-				$count++;
-			}
-		}	
-	}
+	// function setNumberGroups($num)
+	// {
+	// 	$count = 0;
+	// 	foreach ($this->groups as $key => $value) {
+	// 		if ($num > $count)
+	// 		{
+	// 			$value->visibility = true;
+	// 			$count++;
+	// 		}
+	// 		else
+	// 		{
+	// 			$value->visibility = false;
+	// 			$count++;
+	// 		}
+	// 	}	
+	// }
+
 
 }
 
@@ -230,6 +251,9 @@ class Scenario
 
 	// last year for every iteration
 	const LAST_YEAR = 2100;
+
+	// first year for every iteration
+	const FIRST_YEAR = 2010;
 
 	// integer with the current year for the scenario
 	var $current_year;
@@ -242,12 +266,13 @@ class Scenario
 		$this->current_year = $year;
 
 		$this->climate_variables = array(
-			"Emissions_Growth" => new Climate_Variable("Emissions Growth", $this->current_year, 0.13, "percentage"),
-			"CO2_PPM" => new Climate_Variable("CO<sub>2</sub> ppm", $this->current_year, 390, ""),
-			"CO2_Radiative_Forcing" => new Climate_Variable("CO<sub>2</sub> Radiative Forcing", $this->current_year, 0, "round2decimals"),
-			"Temperature_Increase" => new Climate_Variable("Temp Increase (&deg;C)", $this->current_year, 0, "round2decimals"),
-			"Ocean_Heat_Storage" => new Climate_Variable("Ocean Heat Storage (&deg;C)", $this->current_year, 0, "round2decimals"),
-			"Disaster_Risk" => new Climate_Variable("Disaster Risk", $this->current_year, 0, "round")
+			"Emissions_Growth" => new Climate_Variable("emissionsGrowth","Emissions Growth", $this->current_year, 0.13, "percentage"),
+			"CO2_PPM" => new Climate_Variable("carbonPPM","CO<sub>2</sub> ppm", $this->current_year, 390, ""),
+			"CO2_Radiative_Forcing" => new Climate_Variable("carbonRadioative","CO<sub>2</sub> Radiative Forcing", $this->current_year, 0, "round2decimals"),
+			"Temperature_Increase" => new Climate_Variable("temperatureIncrease", "Temp Increase (&deg;C)", $this->current_year, 0, "round2decimals"),
+			"Ocean_Heat_Storage" => new Climate_Variable("oceanHeat", "Ocean Heat Storage (&deg;C)", $this->current_year, 0, "round2decimals"),
+			"Disaster_Risk" => new Climate_Variable("disasterRisk", "Disaster Risk", $this->current_year, 0, "round"),
+			"Original_Risk" => new Climate_Variable("originalRisk", "Original Disaster Risk", $this->current_year, 0, "")
 		);
 
 		$this->updateAll();
@@ -261,7 +286,8 @@ class Scenario
 			"CO2_Radiative_Forcing" => clone $this->climate_variables["CO2_Radiative_Forcing"],
 			"Temperature_Increase" => clone $this->climate_variables["Temperature_Increase"],
 			"Ocean_Heat_Storage" => clone $this->climate_variables["Ocean_Heat_Storage"],
-			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"]
+			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"],
+			"Original_Risk" => clone $this->climate_variables["Original_Risk"]
 		);
 	}
 
@@ -279,6 +305,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Temperature_Increase"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Disaster_Risk"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Original_Risk"]->setCurrentYear($this->current_year);
 	}
 
 	function displayTable()
@@ -289,6 +316,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->displayPredictions();
    		$this->climate_variables["Temperature_Increase"]->displayPredictions();
    		$this->climate_variables["Disaster_Risk"]->displayPredictions();
+   		$this->climate_variables["Original_Risk"]->displayPredictions();
 	}
 
 	function updateAll()
@@ -299,6 +327,7 @@ class Scenario
 		$this->updateOceanHeat();
 		$this->updateTempIncrease();
 		$this->updateDisasterRisk();
+		$this->updateOriginalRisk();
 	}
 	
 	function setEmissionsGrowth($value)
@@ -369,6 +398,18 @@ class Scenario
     	}
 	}
 
+	function updateOriginalRisk()
+	{
+		$this->climate_variables["Original_Risk"]->predictions[2010] = 3;
+		$this->climate_variables["Original_Risk"]->predictions[2025] = 5;
+		$this->climate_variables["Original_Risk"]->predictions[2040] = 9;
+		$this->climate_variables["Original_Risk"]->predictions[2055] = 17;
+		$this->climate_variables["Original_Risk"]->predictions[2070] = 38;
+		$this->climate_variables["Original_Risk"]->predictions[2085] = 90;
+		$this->climate_variables["Original_Risk"]->predictions[2100] = 100;
+
+	}
+
 	function sumOceanHeat($end_year)
     {
     	$start_year = 2010;
@@ -401,10 +442,13 @@ class Group
 
 	var $visibility;
 
+	var $group_id;
 
-	function Group($name)
+
+	function Group($name, $id)
 	{
 		$this->group_name = $name;
+		$this->group_id = $id;
 
 		$group_variables = array(
 			"decision" => null,
@@ -434,21 +478,22 @@ class Group
 		$style = "";
 		if ($this->data[$year]["disaster"] == true)
 		{
-			$disaster = "Se ferrou mane";
-			$style = "style='background-color: red; color: white;'";
+			$disaster = "<span class='label label-danger' style='font-size: 1em;'><i class='fa fa-exclamation-triangle'></i>Harm<i class='fa'></i></span>";
+			$style = " class='text-center harm'";
 		}
 		elseif (is_null($this->data[$year]["disaster"]) == false)
 		{
-			$disaster = "de boa na lagoa";
-			$style = "style='background-color: green; color: white;'";
+			//$disaster = "<span class='label label-success' style='font-size: 1em;'><i class='fa fa-exclamation-triangle'></i>No Harm</span>";
+			$disaster = "No Harm";
+			$style = " class='text-center noHarm'";
 		}
 
 		$name = "group" . $this->group_name;
-		$html_string = "<tr>\n";
+		$html_string = "<tr style='display:none;' class='groupRow' id='groupRow" . $this->group_id . "'>\n";
 
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
-                "<td id='". $name ."Total'>". $this->data[$year]["total"] . "</td>" .
-                "<td>" .
+                "<td id='". $name ."Total'" . "class='text-center decisionRow'" . ">". $this->data[$year]["total"] . "</td>" .
+                "<td class='text-center'>" .
                   "<select  class='choice' name='" . $this->group_name . "'>" .
                     "<option value='null'>Default</option>" .
                     "<option value='0'>Prohibit</option>" .
@@ -458,18 +503,20 @@ class Group
                     "<option value='6'>Encourage</option>" .
                   "</select>" .
                 "</td>" .
-                "<td>" . $this->currentDecision($year) . "</td>" . 
-                "<td id='" . $name . "Income'>" . $this->data[$year]["income"] . "</td>" .
+                "<td class='text-center decisionRow'>" . $this->currentDecision($year) . "</td>" . 
+                "<td id='" . $name . "Income'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["income"] . "</td>" .
                 "<td id='" . $name . "Disaster'" . $style . ">" . $disaster . "</td>" .
-                "<td id='" . $name . "Cost'>" . $this->data[$year]["cost"] . "</td>" .
-                "<td id='" . $name . "Net'> ". $this->data[$year]["net"] . "</td>";
+                "<td id='" . $name . "Cost'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["cost"] . "</td>" .
+                "<td id='" . $name . "Net'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["net"] . "</td>";
 
         //onchange='getChoice()'
         $html_string .= "</tr>";
 
-		if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		// if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		if ($this->data[$year]["alive"] == true)
         	echo $html_string;
-        elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
+        else
+        // elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
         	echo "<tr style='background-color: red; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
 	}
 
@@ -574,11 +621,15 @@ class Climate_Variable
 	// name of the variable to be displayed
 	var $name;
 
+	// HTML Row ID
+	var $rowID;
+
 	// choose the formatting option for display
 	var $formatting_options;
 
-	function Climate_Variable($name, $year, $value, $option) 
+	function Climate_Variable($rowID, $name, $year, $value, $option, $preset="") 
 	{
+		$this->rowID = $rowID;
 		$this->name = $name;
 		$this->current_year = $year;
 		$this->initial_value = $value;
@@ -616,7 +667,7 @@ class Climate_Variable
 
 	function displayPredictions()
 	{
-		$html_string = "<tr>\n";
+		$html_string = "<tr class='variablesRow' id='" . $this->rowID . "'>\n";
 		$html_string .= "<td>" . $this->name .  "</td>";
 
 		$year_id = 2010;
@@ -624,11 +675,13 @@ class Climate_Variable
 		foreach ($this->predictions as $key => $value) 
 		{
 			if ($year_id  == $this->current_year)
-				$style = " style='border: 2px solid black'";
+			//	$style = " style='border: 2px solid black'";
+			//	$style = " style='background-color: #6DDFC8; color:white;'";
+				$style = " selected";
 			else
 				$style = "";
 
-			$html_string .= "<td class='col" . $year_id . "'" . $style . ">" . $this->convertDisplay($value) . "</td>";
+			$html_string .= "<td id='" . $year_id . $this->rowID . "' class='col" . $year_id . " text-center" . $style . "'>" . $this->convertDisplay($value) . "</td>";
 			$year_id = $year_id + self::INCREMENT;
 		}
 		$html_string .= "</tr>\n";

@@ -17,11 +17,11 @@
 		$_SESSION['model']->createDisasterScenario($year);
 	}
 
-	if (isset($_GET['num_groups']))
-	{
-		// echo "<h2> the number of groups selected is: " . $_GET['num_groups'];
-		$_SESSION['model']->setNumberGroups($_GET['num_groups']);
-	}
+	// if (isset($_GET['num_groups']))
+	// {
+	// 	// echo "<h2> the number of groups selected is: " . $_GET['num_groups'];
+	// 	$_SESSION['model']->setNumberGroups($_GET['num_groups']);
+	// }
 
 	$_SESSION['model']->displayScenario($year);
 
