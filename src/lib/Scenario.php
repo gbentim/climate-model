@@ -9,6 +9,9 @@ class Scenario
 	// last year for every iteration
 	const LAST_YEAR = 2100;
 
+	// first year for every iteration
+	const FIRST_YEAR = 2010;
+
 	// integer with the current year for the scenario
 	var $current_year;
 
@@ -20,12 +23,13 @@ class Scenario
 		$this->current_year = $year;
 
 		$this->climate_variables = array(
-			"Emissions_Growth" => new Climate_Variable("Emissions Growth", $this->current_year, 0.13, "percentage"),
-			"CO2_PPM" => new Climate_Variable("CO<sub>2</sub> ppm", $this->current_year, 390, ""),
-			"CO2_Radiative_Forcing" => new Climate_Variable("CO<sub>2</sub> Radiative Forcing", $this->current_year, 0, "round2decimals"),
-			"Temperature_Increase" => new Climate_Variable("Temp Increase (&deg;C)", $this->current_year, 0, "round2decimals"),
-			"Ocean_Heat_Storage" => new Climate_Variable("Ocean Heat Storage (&deg;C)", $this->current_year, 0, "round2decimals"),
-			"Disaster_Risk" => new Climate_Variable("Disaster Risk", $this->current_year, 0, "round")
+			"Emissions_Growth" => new Climate_Variable("emissionsGrowth","Emissions Growth", $this->current_year, 0.13, "percentage"),
+			"CO2_PPM" => new Climate_Variable("carbonPPM","CO<sub>2</sub> ppm", $this->current_year, 390, ""),
+			"CO2_Radiative_Forcing" => new Climate_Variable("carbonRadioative","CO<sub>2</sub> Radiative Forcing", $this->current_year, 0, "round2decimals"),
+			"Temperature_Increase" => new Climate_Variable("temperatureIncrease", "Temp Increase (&deg;C)", $this->current_year, 0, "round2decimals"),
+			"Ocean_Heat_Storage" => new Climate_Variable("oceanHeat", "Ocean Heat Storage (&deg;C)", $this->current_year, 0, "round2decimals"),
+			"Disaster_Risk" => new Climate_Variable("disasterRisk", "Disaster Risk", $this->current_year, 0, "round"),
+			"Original_Risk" => new Climate_Variable("originalRisk", "Original Disaster Risk", $this->current_year, 0, "")
 		);
 
 		$this->updateAll();
@@ -39,7 +43,8 @@ class Scenario
 			"CO2_Radiative_Forcing" => clone $this->climate_variables["CO2_Radiative_Forcing"],
 			"Temperature_Increase" => clone $this->climate_variables["Temperature_Increase"],
 			"Ocean_Heat_Storage" => clone $this->climate_variables["Ocean_Heat_Storage"],
-			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"]
+			"Disaster_Risk" => clone $this->climate_variables["Disaster_Risk"],
+			"Original_Risk" => clone $this->climate_variables["Original_Risk"]
 		);
 	}
 
@@ -57,6 +62,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Temperature_Increase"]->setCurrentYear($this->current_year);
    		$this->climate_variables["Disaster_Risk"]->setCurrentYear($this->current_year);
+   		$this->climate_variables["Original_Risk"]->setCurrentYear($this->current_year);
 	}
 
 	function displayTable()
@@ -67,6 +73,7 @@ class Scenario
    		$this->climate_variables["Ocean_Heat_Storage"]->displayPredictions();
    		$this->climate_variables["Temperature_Increase"]->displayPredictions();
    		$this->climate_variables["Disaster_Risk"]->displayPredictions();
+   		$this->climate_variables["Original_Risk"]->displayPredictions();
 	}
 
 	function updateAll()
@@ -77,6 +84,7 @@ class Scenario
 		$this->updateOceanHeat();
 		$this->updateTempIncrease();
 		$this->updateDisasterRisk();
+		$this->updateOriginalRisk();
 	}
 	
 	function setEmissionsGrowth($value)
@@ -147,6 +155,18 @@ class Scenario
     	}
 	}
 
+	function updateOriginalRisk()
+	{
+		$this->climate_variables["Original_Risk"]->predictions[2010] = 3;
+		$this->climate_variables["Original_Risk"]->predictions[2025] = 5;
+		$this->climate_variables["Original_Risk"]->predictions[2040] = 9;
+		$this->climate_variables["Original_Risk"]->predictions[2055] = 17;
+		$this->climate_variables["Original_Risk"]->predictions[2070] = 38;
+		$this->climate_variables["Original_Risk"]->predictions[2085] = 90;
+		$this->climate_variables["Original_Risk"]->predictions[2100] = 100;
+
+	}
+
 	function sumOceanHeat($end_year)
     {
     	$start_year = 2010;
@@ -156,5 +176,4 @@ class Scenario
     	return $sum;
     }
 }
-
 ?>

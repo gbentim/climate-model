@@ -3,13 +3,10 @@
 * Only runs Jquery Functions when the whole document is ready
 * ****************************************************************/
 
-var url = "controller.php?" + "year=";
-$( document ).ready(function()
-// Open Function Bracket. The Closing Bracket of this function is at the end of the script 
-{
-    // var url = "controller.php?" + "year=";
+var url = "src/controller.php?" + "year=";
 
-    // hideGroupsRows();
+$( document ).ready(function()
+{
 
     loadTable(2010);
 
@@ -17,7 +14,6 @@ $( document ).ready(function()
 
     hideVariablesRows();
 
-    // hideGroupsRows();
 
 });
 
@@ -77,14 +73,7 @@ function hideGroupsRows()
 
     // Decremente One Group
     $("#decrement").click(function( event ) {
-        event.preventDefault();
-        
-        /*var decrement = parseInt($("#input-info").val()) + 1;
-       
-        if(!decrement < 1)
-        {
-          $( "#groupRow" + decrement ).hide('slow');
-        } */
+      event.preventDefault();
         
       hideGroupsRows();              
         
@@ -92,12 +81,9 @@ function hideGroupsRows()
 
     // Increment One Group
     $("#increment").click(function( event ) {
-        event.preventDefault();
-        /*var increment = $("#input-info").val();
-       
-        $( "#groupRow" + increment ).show('slow');*/
+      event.preventDefault();
 
-        hideGroupsRows();
+      hideGroupsRows();
 
     });
 
@@ -210,7 +196,6 @@ function loadTable(year, additional_params)
               additional_params = "";
               additional_params += "&group_name=" + $(this).attr('name');
               additional_params += "&group_value=" + $(this).val();
-              // alert(additional_params);
               loadTable(year, additional_params)     
           });
 
@@ -226,12 +211,6 @@ function loadTable(year, additional_params)
    setTimeout(function(){
      hideGroupsRows();
    }, 50);
-  
-  // groupsInput();
-
-  // hideVariablesRows();
-
-  // hideGroupsRows();
   
   setTimeout(function(){
      loadChart();
@@ -294,19 +273,3 @@ function loadChart()
   
 
 }
-
-
-/*****************************************************************
-* TABLE HEADER
-* Change Header Yer Number Style when Selected
-* ****************************************************************/
-/*function tableHeaderStyle()
-{
-    var year = $("#")
-    $(selector).click(function)
-}
-*/
-
-
-// END of DocumentReady
-// });

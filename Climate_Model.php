@@ -1,11 +1,17 @@
 <?php
-
+/**
+ * Page-level DocBlock
+ */
 class Climate_Model
 {
-	// every iteration is a 15 years increment
+	/**
+	 * Page-level DocBlock
+	 */
 	const INCREMENT = 15;
 
-	// first year for every iteration
+	/**
+	 * Page-level DocBlock
+	 */
 	const FIRST_YEAR = 2010;
 
 	const INITIAL_EMISSIONS = 0.13;
@@ -13,18 +19,29 @@ class Climate_Model
 	const MIN = 1;
 	const MAX = 99;
 
-	// array with 7 scenario objects
-	var $scenarios;
+	/**
+	 * Page-level DocBlock
+	 */
+	 var $scenarios;
 
-	// array with 16 group objects
+	 /**
+	  * Page-level DocBlock
+	  */
 	var $groups;
 
-	// disaster object
+	/**
+	 * Page-level DocBlock
+	 */
 	var $disaster;
 
-	//if scenarios need to be cloned
+	/**
+	 * Page-level DocBlock
+	 */
 	var $should_clone;
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function Climate_Model()
 	{
 		$initial_scenario = new Scenario(2010);
@@ -68,12 +85,14 @@ class Climate_Model
 		);
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function displayScenario($year)
 	{
 		if ($this->should_clone[$year])
 			$this->cloneScenario($year);
 
-		// echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
 		echo "<table class='table' id='main-table'>" . 
 			 "<tr>" .
 			 "<th class='main-header'> Year </th>" .
@@ -96,29 +115,12 @@ class Climate_Model
 
 		echo "<table class='table'>";
 		echo "<hr>";
-		//echo "<hr>";
-		/*echo  "<div class='row'>" .
-					"<div class='col-xs-3 col-xs-offset-3'>" .
-						"<div class='input-group number-spinner'>" .
-							"<span class='input-group-btn data-dwn'>" .
-								"<button class='btn btn-default btn-info data-dir=dwn'><span class='glyphicon glyphicon-minus'></span></button>" .
-							"</span>" .
-							"<input type='text' class='form-control text-center value='1' min='10' max='40'>" .
-							"<span class='input-group-btn data-up'>" .
-								"<button class='btn btn-default btn-info' data-dir='up'><span class='glyphicon glyphicon-plus'></span></button>" .
-							"</span>" .
-						"</div>" .
-					"</div>" .
-				"</div>";*/
 		$this->displayGroups($year);
 		echo "</table>";
-
-
 	}
 
 	function displayGroups($year)
 	{
-		// "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
 		$header = "<tr>" .
           "<th class='main-header'> Group </th>" .
           "<th class='main-header text-center'> Total $ </th>" .
@@ -136,6 +138,9 @@ class Climate_Model
 
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function cloneScenario($year)
 	{
 		if ($year != self::FIRST_YEAR && $this->scenarios[$year-self::INCREMENT] == "")
@@ -148,6 +153,9 @@ class Climate_Model
 		$this->scenarios[$year]->setCurrentYear($year);
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function updateEmissions($year, $value)
 	{
 		if ($this->should_clone[$year])

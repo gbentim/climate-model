@@ -22,10 +22,13 @@ class Group
 
 	var $visibility;
 
+	var $group_id;
 
-	function Group($name)
+
+	function Group($name, $id)
 	{
 		$this->group_name = $name;
+		$this->group_id = $id;
 
 		$group_variables = array(
 			"decision" => null,
@@ -55,21 +58,22 @@ class Group
 		$style = "";
 		if ($this->data[$year]["disaster"] == true)
 		{
-			$disaster = "Se ferrou mane";
-			$style = "style='background-color: red; color: white;'";
+			$disaster = "<span class='label label-danger' style='font-size: 1em;'><i class='fa fa-exclamation-triangle'></i>Harm<i class='fa'></i></span>";
+			$style = " class='text-center harm'";
 		}
 		elseif (is_null($this->data[$year]["disaster"]) == false)
 		{
-			$disaster = "de boa na lagoa";
-			$style = "style='background-color: green; color: white;'";
+			//$disaster = "<span class='label label-success' style='font-size: 1em;'><i class='fa fa-exclamation-triangle'></i>No Harm</span>";
+			$disaster = "No Harm";
+			$style = " class='text-center noHarm'";
 		}
 
 		$name = "group" . $this->group_name;
-		$html_string = "<tr>\n";
+		$html_string = "<tr style='display:none;' class='groupRow' id='groupRow" . $this->group_id . "'>\n";
 
 		$html_string .= "<td id='" . $name . "'> " . $this->group_name . "</td>" .
-                "<td id='". $name ."Total'>". $this->data[$year]["total"] . "</td>" .
-                "<td>" .
+                "<td id='". $name ."Total'" . "class='text-center decisionRow'" . ">". $this->data[$year]["total"] . "</td>" .
+                "<td class='text-center'>" .
                   "<select  class='choice' name='" . $this->group_name . "'>" .
                     "<option value='null'>Default</option>" .
                     "<option value='0'>Prohibit</option>" .
@@ -79,19 +83,21 @@ class Group
                     "<option value='6'>Encourage</option>" .
                   "</select>" .
                 "</td>" .
-                "<td>" . $this->currentDecision($year) . "</td>" . 
-                "<td id='" . $name . "Income'>" . $this->data[$year]["income"] . "</td>" .
+                "<td class='text-center decisionRow'>" . $this->currentDecision($year) . "</td>" . 
+                "<td id='" . $name . "Income'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["income"] . "</td>" .
                 "<td id='" . $name . "Disaster'" . $style . ">" . $disaster . "</td>" .
-                "<td id='" . $name . "Cost'>" . $this->data[$year]["cost"] . "</td>" .
-                "<td id='" . $name . "Net'> ". $this->data[$year]["net"] . "</td>";
+                "<td id='" . $name . "Cost'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["cost"] . "</td>" .
+                "<td id='" . $name . "Net'" . "class='text-center decisionRow'" . ">" . $this->data[$year]["net"] . "</td>";
 
         //onchange='getChoice()'
         $html_string .= "</tr>";
 
-		if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		// if ($this->data[$year]["alive"] == true && $this->visibility == true)
+		if ($this->data[$year]["alive"] == true)
         	echo $html_string;
-        elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
-        	echo "<tr style='background-color: red; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
+        else
+        // elseif ($this->data[$year]["alive"] == false && $this->visibility == true)
+        	echo "<tr style='background-color: #E74C3C; color: white;'><td>" . $this->group_name . "</td><td> DEAD </td></tr>";
 	}
 
 	function currentDecision($year)

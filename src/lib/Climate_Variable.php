@@ -17,11 +17,15 @@ class Climate_Variable
 	// name of the variable to be displayed
 	var $name;
 
+	// HTML Row ID
+	var $rowID;
+
 	// choose the formatting option for display
 	var $formatting_options;
 
-	function Climate_Variable($name, $year, $value, $option) 
+	function Climate_Variable($rowID, $name, $year, $value, $option, $preset="") 
 	{
+		$this->rowID = $rowID;
 		$this->name = $name;
 		$this->current_year = $year;
 		$this->initial_value = $value;
@@ -59,7 +63,7 @@ class Climate_Variable
 
 	function displayPredictions()
 	{
-		$html_string = "<tr>\n";
+		$html_string = "<tr class='variablesRow' id='" . $this->rowID . "'>\n";
 		$html_string .= "<td>" . $this->name .  "</td>";
 
 		$year_id = 2010;
@@ -67,11 +71,13 @@ class Climate_Variable
 		foreach ($this->predictions as $key => $value) 
 		{
 			if ($year_id  == $this->current_year)
-				$style = " style='border: 2px solid black'";
+			//	$style = " style='border: 2px solid black'";
+			//	$style = " style='background-color: #6DDFC8; color:white;'";
+				$style = " selected";
 			else
 				$style = "";
 
-			$html_string .= "<td class='col" . $year_id . "'" . $style . ">" . $this->convertDisplay($value) . "</td>";
+			$html_string .= "<td id='" . $year_id . $this->rowID . "' class='col" . $year_id . " text-center" . $style . "'>" . $this->convertDisplay($value) . "</td>";
 			$year_id = $year_id + self::INCREMENT;
 		}
 		$html_string .= "</tr>\n";

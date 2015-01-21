@@ -1,5 +1,5 @@
 <?php
-include "/lib/Climate_Model.php";
+include "lib/Climate_Model.php";
 
 session_start();
 

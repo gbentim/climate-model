@@ -2,35 +2,92 @@
 include "Scenario.php";
 include "Group.php";
 
-
+/**
+ * Climate Model
+ *
+ * Contains the different scenarios and groups.
+ * Responsible for performing interactions with
+ * the groups and scenarios.
+ * Creates a disaster scenario based on the group
+ * inputs and how it affects the scenarios 
+ * Displays all the information from the different
+ * scenarios and groups in tables.
+ * 
+ * @author Guilherme Bentim (gizmo.bentim@gmail.com)
+ * @author Fillipo Maddella (fillipo.madella@gmail.com)
+ * @version 1.0
+ * @copyright none
+ * @link
+ */
 class Climate_Model
 {
-	// every iteration is a 15 years increment
+	/**
+	 * Scenarios have a spam of 15 years so all 
+	 * loops have iterations of 15 years.
+	 */
 	const INCREMENT = 15;
 
-	// first year for every iteration
+	/**
+	 * The first and last year of the iterations is defined.
+	 */
 	const FIRST_YEAR = 2010;
+	const LAST_YEAR = 2100;
 
+	/**
+	 * The initial rate of emissions in the first scenario is defined.
+	 */
 	const INITIAL_EMISSIONS = 0.13;
 
+	/**
+	 * These are used to define the range of the disaster risk.
+	 */
 	const MIN = 1;
 	const MAX = 99;
 
-	// array with 7 scenario objects
-	var $scenarios;
+	/**
+	 * A hash table with all scenarios and their respective years.
+	 */
+	 private $scenarios;
 
-	// array with 16 group objects
-	var $groups;
+	/**
+	 * A hash table with all groups and their respective names.
+	 */
+	private $groups;
 
-	// disaster object
-	var $disaster;
+	/**
+	 * The random number used to calculate the disaster scenario
+	 */
+	private $disaster;
 
-	//if scenarios need to be cloned
-	var $should_clone;
+	/**
+	 * A hash table with boolean variables for each scenario, determining
+	 * whether the scenario should be cloned or not, in order to update
+	 * the subsequent scenarios whenever previous scenarios are updated.
+	 */
+	private $should_clone;
 
-	function Climate_Model()
+
+	/**
+	 * Default Constructor
+	 *
+	 * Initializes all hash tables.
+	 * Scenarios are spanned from 2010 to 2100.
+	 * Groups are spanned from A to P, totalling 16 groups.
+	 * The disaster variable is not initialized until it is called. 
+	 *
+	 *
+	 */
+	function __construct()
 	{
+		/**
+		 * The first scenario is initialized to 2010, the initial year.
+		 */
 		$initial_scenario = new Scenario(2010);
+
+		/**
+		 * All scenarios, except for the first, are initiliazed to empty.
+		 * They will eventually be cloned to the initial scenario.
+		 */
 		$this->scenarios = array(
 			2010 => $initial_scenario,
 			2025 => "",
@@ -41,6 +98,11 @@ class Climate_Model
 			2100 => ""
 		);
 
+		/**
+		 * The first scenario is already initialized so it won't be coned.
+		 * All other scenarios remain awaiting for clonation, depending on
+		 * runtime circumstances.
+		 */
 		$this->should_clone = array(
 			2010 => false,
 			2025 => true,
@@ -51,75 +113,123 @@ class Climate_Model
 			2100 => true
 		);
 
+		/**
+		 * All groups are initialized with default names and an index number.
+		 * 
+		 * @todo Allow for the end-user to estabilish and modify group names.
+		 */
 		$this->groups = array(
-			"A" => new Group("A"),
-			"B" => new Group("B"),
-			"C" => new Group("C"),
-			"D" => new Group("D"),
-			"E" => new Group("E"),
-			"F" => new Group("F"),
-			"G" => new Group("G"),
-			"H" => new Group("H"),
-			"I" => new Group("I"),
-			"J" => new Group("J"),
-			"K" => new Group("K"),
-			"L" => new Group("L"),
-			"M" => new Group("M"),
-			"N" => new Group("N"),
-			"O" => new Group("O"),
-			"P" => new Group("P")
+			"A" => new Group("A", 1),
+			"B" => new Group("B", 2),
+			"C" => new Group("C", 3),
+			"D" => new Group("D", 4),
+			"E" => new Group("E", 5),
+			"F" => new Group("F", 6),
+			"G" => new Group("G", 7),
+			"H" => new Group("H", 8),
+			"I" => new Group("I", 9),
+			"J" => new Group("J", 10),
+			"K" => new Group("K", 11),
+			"L" => new Group("L", 12),
+			"M" => new Group("M", 13),
+			"N" => new Group("N", 14),
+			"O" => new Group("O", 15),
+			"P" => new Group("P", 16)
 		);
 	}
 
+	/**
+	 * Display Scenario
+	 *
+	 * Displays one of the senarios using an html table.
+	 * A header is displayed with links to other scenarios.
+	 * A button with the disaster scenario is displayed on the bottom.
+	 * Display the groups in another table.
+	 *
+	 * @param int $year - The current year of the scenario to be displayed.
+	 * @return several strings with htmls tags and the content.
+	 */
 	function displayScenario($year)
 	{
+		// check whether the scenario needs to be cloned
 		if ($this->should_clone[$year])
 			$this->cloneScenario($year);
 
-		// echo "<h2>" . $this->scenarios[$year]->current_year . "</h2>";
-		echo "<table class='table'>" . 
+		// display header with links to other scenarios
+		echo "<table class='table' id='main-table'>" . 
 			 "<tr>" .
-			 "<th> Year </th>" .
-			 "<th><a href='' class='years'>2010</a></th>" .
-			 "<th><a href='' class='years'>2025</a></th>" .
-			 "<th><a href='' class='years'>2040</a></th>" .
-			 "<th><a href='' class='years'>2055</a></th>" .
-			 "<th><a href='' class='years'>2070</a></th>" .
-			 "<th><a href='' class='years'>2085</a></th>" .
-			 "<th><a href='' class='years'>2100</a></th></tr>";
+			 "<th class='main-header'> Year </th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2010'>2010</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2025'>2025</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2040'>2040</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2055'>2055</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2070'>2070</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2085'>2085</a></th>" .
+			 "<th class='main-header text-center'><a href='' class='years' id='year2100'>2100</a></th></tr>";
 
+		// display the scenario for the given year
 		$this->scenarios[$year]->displayTable();
 
+		// close the table containing the scenarios
 		echo "</table>";
+
+		// display the button that will generate the disaster scenario
+		echo " <div class='container' id='getDisaster'>" .
+		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
+	    	 " </div>";
+
+	   	// open the table that will contain the groups
 		echo "<table class='table'>";
 		echo "<hr>";
-		echo "<button type='button' class='btn btn-danger btn-block' id='danger'>Disaster</button>";
-		echo "<hr>";
+
+		//display groups and close the table
 		$this->displayGroups($year);
 		echo "</table>";
 	}
 
+	/**
+	 * Display Groups
+	 *
+	 * Display all groups in the list of groups.
+	 * Display a header with titles defining the different categories
+	 * of information that will be displayed for each group.
+	 *
+	 * @param int $year - The current year of the scenario to be displayed.
+	 * @return several strings with htmls tags and the content.
+	 */
 	function displayGroups($year)
 	{
-		// "<tr><td></td></tr> <tr style='border-bottom: 1px solid #000;'><td> </td> </tr>" . 
+		// a header with the categories of info that will be displayed
 		$header = "<tr>" .
-          "<th> Group </th>" .
-          "<th> Total $ </th>" .
-          "<th> Develop </th>" .
-          "<th> Decision </th>" .
-          "<th> Income </th>" .
-          "<th> Disaster </th>" .
-          "<th> Cost </th>" .
-          "<th> Net </th>" .
+          "<th class='main-header'> Group </th>" .
+          "<th class='main-header text-center'> Total $ </th>" .
+          "<th class='main-header text-center'> Develop </th>" .
+          "<th class='main-header text-center'> Decision </th>" .
+          "<th class='main-header text-center'> Income </th>" .
+          "<th class='main-header text-center'> Disaster </th>" .
+          "<th class='main-header text-center'> Cost </th>" .
+          "<th class='main-header text-center'> Net </th>" .
         "</tr>";
 
         echo $header;
+        
+        // display each group on the list
 		foreach ($this->groups as $key => $value)
 			$value->displayGroup($year);
+
 	}
 
+	/**
+	 * Clone Scenario
+	 *
+	 * Copies the previous scenario into the given scenario.
+	 *
+	 * @param int $year - The year of the scenario that will be cloned.
+	 */
 	function cloneScenario($year)
 	{
+		// check if it is not the first year in the iteration and if the scenario
+		// is currently empty
 		if ($year != self::FIRST_YEAR && $this->scenarios[$year-self::INCREMENT] == "")
 			$this->scenarios[$year] = clone $this->scenarios[self::FIRST_YEAR];
 		else
@@ -130,6 +240,9 @@ class Climate_Model
 		$this->scenarios[$year]->setCurrentYear($year);
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function updateEmissions($year, $value)
 	{
 		if ($this->should_clone[$year])
@@ -144,12 +257,13 @@ class Climate_Model
 		}
 
 		$new_emissions = $previous - (0.01 * (5 - $value));
-		// echo "O que ta pegando...  Valor anterior: " . $previous;
-		// echo "Valor average: " . $value;
 		$this->scenarios[$year]->setEmissionsGrowth($new_emissions);
 		$this->should_clone[$year + self::INCREMENT] = true;
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function calculateAverage($year)
 	{
 		$total = 0;
@@ -166,17 +280,21 @@ class Climate_Model
 		return $total / $num_groups;
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function changeGroupDecision($name, $year, $value)
 	{		
 		$this->groups[$name]->changeDecision($year, $value);
 
 		$average = $this->calculateAverage($year);
 
-		// echo "This is the average: " . $average;
-
 		$this->updateEmissions($year, $average);
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function createDisasterScenario($year)
 	{
 		foreach ($this->groups as $key => $value)
@@ -184,6 +302,9 @@ class Climate_Model
 				$this->generateDisaster($value->group_name, $year);
 	}
 
+	/**
+	 * Page-level DocBlock
+	 */
 	function generateDisaster($group, $year)
 	{
 		$disaster = rand (self::MIN, self::MAX);
@@ -200,28 +321,6 @@ class Climate_Model
 			$this->groups[$group]->data[$year]["disaster"] = true;
 			$this->groups[$group]->calculateCost($year, $disaster, $risk);
 		}
-
-		// echo "<p> Group: " . $group . "</p>";
-		// echo "<p> The disaster scenario is: " . $disaster . "</p>";
-		// echo "<p> The disaster risk is: " . $risk . "</p>";
-	}
-
-	function setNumberGroups($num)
-	{
-		$count = 0;
-		foreach ($this->groups as $key => $value) 
-		{
-			if ($num > $count)
-			{
-				$value->visibility = true;
-				$count++;
-			}
-			else
-			{
-				$value->visibility = false;
-				$count++;
-			}
-		}	
 	}
 }
 
