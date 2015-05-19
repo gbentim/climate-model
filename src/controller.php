@@ -1,14 +1,16 @@
 <?php 
 	include "config.php";
 
+	if (isset($_GET['reset']) == true)
+		if (session_destroy())
+			print "A new game has started.\n";
+
 	if (isset($_GET['year']))
 		$year = intval($_GET['year']);
 
-	if (isset($_GET['group_value']) && isset($_GET['group_name']))
+	if (isset($_GET['groups_decisions']))
 	{
-		$name = $_GET['group_name'];
-		$value = $_GET['group_value'];
-		$_SESSION['model']->changeGroupDecision($name, $year, $value);
+		$_SESSION['model']->changeGroupsDecision($_GET['groups_decisions'], $year);
 	}
 
 	if (isset($_GET['disaster']) == true)

@@ -174,8 +174,9 @@ class Climate_Model
 		echo "</table>";
 
 		// display the button that will generate the disaster scenario
-		echo " <div class='container' id='getDisaster'>" .
+		echo "	<div class='container' id='getDisaster'>" .
 		   	 "  <button type='button' class='btn btn-danger' id='danger'><i class='fa fa-bolt'></i>Check Disaster</button>" .
+	    	 "  <button type='button' class='btn btn-success' id='next'><i class='fa fa-arrow-right'></i>Next Year</button>" .
 	    	 " </div>";
 
 	   	// open the table that will contain the groups
@@ -201,7 +202,7 @@ class Climate_Model
 	{
 		// a header with the categories of info that will be displayed
 		$header = "<tr>" .
-          "<th class='main-header'> Group </th>" .
+          "<th class='main-header'> Player </th>" .
           "<th class='main-header text-center'> Total $ </th>" .
           "<th class='main-header text-center'> Develop </th>" .
           "<th class='main-header text-center'> Decision </th>" .
@@ -241,10 +242,17 @@ class Climate_Model
 	}
 
 	/**
-	 * Page-level DocBlock
+	 * Update Emissions
+	 *
+	 * Updates the Emissions Growth, based on the inputs from the groups.
+	 * The Emissions Growth will then update all other variables.
+	 *
+	 * @param int $year - The year of the scenario that will be updated
+	 * @param float $value - The average of the group decisions
 	 */
 	function updateEmissions($year, $value)
 	{
+		// check if the scenario needs to be cloned, due to updates made to previous scenarios
 		if ($this->should_clone[$year])
 			$this->cloneScenario($year);
 
@@ -256,8 +264,12 @@ class Climate_Model
 			$previous = $previous*(($previous/4)+1);
 		}
 
+		// calculate the new Emissions Growth based on the average of the group decisions and the
+		// previous Emissions Growth
 		$new_emissions = $previous - (0.01 * (5 - $value));
 		$this->scenarios[$year]->setEmissionsGrowth($new_emissions);
+
+		// raise flag that next iterations should clone, since changes were made
 		$this->should_clone[$year + self::INCREMENT] = true;
 	}
 
@@ -283,14 +295,29 @@ class Climate_Model
 	/**
 	 * Page-level DocBlock
 	 */
-	function changeGroupDecision($name, $year, $value)
+	// function changeGroupDecision($name, $year, $value)
+	// {		
+	// 	$this->groups[$name]->changeDecision($year, $value);
+
+	// 	$average = $this->calculateAverage($year);
+
+	// 	$this->updateEmissions($year, $average);
+	// }
+
+	function changeGroupSDecision($decisions, $year)
 	{		
-		$this->groups[$name]->changeDecision($year, $value);
-
-		$average = $this->calculateAverage($year);
-
-		$this->updateEmissions($year, $average);
+		for ($i=0; $i < strlen($decisions); $i++)
+		{
+			$this->groups[$decisions{$i}]->changeDecision($year, $decisions{$i+1});
+			$average = $this->calculateAverage($year);
+			$this->updateEmissions($year, $average);
+			// print $year . "\n";
+			// print $decisions{$i} . $decisions{$i+1} . "\n";
+			$i++;
+		}
 	}
+
+
 
 	/**
 	 * Page-level DocBlock
